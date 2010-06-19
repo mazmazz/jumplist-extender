@@ -1,0 +1,34 @@
+NOTICE
+
+WINDOWS API CODE PACK is not distributed with Jumplist Extender's source because it uses a non-GPL compatible license. Because of this, Jumplist Extender WILL NOT BUILD unless you download this library's source, and apply the included changes.
+
+Replacing Windows API Code Pack with a free alternative is on the roadmap for v2.0. If you feel empowered, you can help write a library! 
+
+
+PROGRAM DETAILS
+
+Jumplist Extender uses the Windows API Code Pack to:
+
+1. Apply jumplists to a Win7 "appId"
+2. Apply Win7 "appIds" to the affected programs' shortcuts and windows
+
+In other words, Windows' jumplists are applied to the program by assigning the program and its shortcuts to a specific "appId." The appId then has a jumplist assigned to it, so the correct jumplits is shown for the program.
+
+For more information, see "Win7 Taskbar links.pdf".
+
+
+THEREFORE
+
+The ideal free alternative must be able to:
+
+1. Apply and delete a jumplist from an appId
+1a. Implement jumplist "verbs", groups, and separators (basically an empty "verb")
+2. Apply and delete an appId from a LNK shortcut file.
+3. Apply and delete an appId from a program window
+
+All of these can be accomplished via C++ calls and P/Invokes.
+
+
+CONTACT
+
+If you have any questions, please contact me, Marco Zafra, at <digimarco35@yahoo.com>.

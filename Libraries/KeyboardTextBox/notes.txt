@@ -1,0 +1,15 @@
+KEYBOARD TEXTBOX
+* Vanilla Home, End, Insert, Delete, and Backspace, will have usual effect
+* SHIFT Home, End, Insert, Delete, and Backspace, will have usual effect
+* Up/Down arrow keys will be typed
+* Left/Right arrow keys will have usual effect
+
+* Vanilla F1-F12 keys will be typed
+
+* Escape will be typed
+* Enter will be typed
+* Tab will have usual effect?
+** Ignore Shift+Tab
+* Caps lock will have usual effect
+
+* WinKey, MenuKey, and RCtrl/Alt/Shift plzkthx

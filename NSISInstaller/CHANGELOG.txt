@@ -1,0 +1,49 @@
+===Version 0.2-C===
+Version 0.2-C is a '''MINOR BUG FIX''' release.
+
+''FIXED:''
+* '''MSI start menu shortcuts would not return the right program file (especially Microsoft Office)'''
+* Opening a Jumplist Pack from Explorer would cause a weird dialog to pop up
+
+''KNOWN ISSUES:''
+* [Crit][T7EBg] "An item with the same key has already been added" (#51)
+* [Crit] "The path is not of legal form." when selecting a shortcut (#52)
+
+===Version 0.2-B===
+Version 0.2-B is a '''MINOR BUG FIX''' release.
+
+''ADDED/CHANGED:''
+* '''Programs dialog now shows all program folders, including pinned taskbar and start menu shortcuts!'''
+* '''Weird task behavior is fixed! All tasks should work as expected, and UAC tasks should work.'''
+* Updates are made more prominent, with a link on the main window as well as a balloon reminder.
+
+''FIXED:''
+* '''[x64] Jumplist tasks for built-in Windows programs (e.g. Paint) failed to run'''
+* '''[Crit] Programs dialog crashed when selecting folder shortcut'''
+* [Installer] Start menu shortcuts were not correctly placed or deleted for regular, non-administrative users (#12)
+* [T7EBg] Background process didn't run under low priority (#55)
+
+''KNOWN ISSUES:''
+* [Crit][T7EBg] "An item with the same key has already been added" (#51)
+* [Crit] "The path is not of legal form." when selecting a shortcut (#52)
+
+===Version 0.2===
+Version 0.2 is a '''BUG FIX''' release. 
+
+''ADDED/CHANGED:''
+* Upgrade timelock removed. v0.1 is timelocked after May 31, whereas v0.2 IS NOT TIMELOCKED!
+* '''Additional options for keyboard tasks: Ignore if program is not running, or if it's currently running'''
+
+''FIXED:''
+* Command line task will sometimes crash. (#41)
+* '''When saving, icons will sometimes change position (#37)'''
+* '''UAC/administrative windows cannot accept jumplists or their tasks (#49)'''
+* '''[Crit] "Access denied" when selecting a UAC/administrative main window. (#47)'''
+* [Crit] "Error HRESULT E_FAIL has been returned from a call to a COM component." (#42)
+* [Crit] "Cannot find central directory" when importing a jumplist pack (#45)
+* [Crit] "The process cannot access the file 'AppSettings.xml' because it is being used by another process." when importing a jumplist pack and canceling (#46)
+
+''KNOWN ISSUES:''
+* Installer does not place correctly or delete shortcuts for regular, non-administrative users (#12)
+* [Crit][T7EBg] "An item with the same key has already been added" (#51)
+* [Crit][T7EBg] "The path is not of legal form." (#52)

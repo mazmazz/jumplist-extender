@@ -1,0 +1,5 @@
+NOTICE
+
+Currently, Jumplist Extender's XML parser is VERY sensitive to XML syntax changes. Make sure to follow the existing XML's syntax as closely as you can.
+
+If you run into any bugs ('specially major ones,) please shoot me an email! digimarco35@yahoo.com

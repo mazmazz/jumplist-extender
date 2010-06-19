@@ -1,0 +1,10 @@
+*.csproj.user
+obj/
+bin/
+Backup/
+NSISInstaller/Files/*
+NSISInstaller/Output/*
+*.ncb
+*.suo
+_ReSharper.*
+*.resharper.user
