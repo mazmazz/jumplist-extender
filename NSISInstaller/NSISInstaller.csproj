@@ -95,6 +95,7 @@
   <PropertyGroup>
     <PostBuildEvent>rmdir /s /q "$(ProjectDir)Files"
 if "$(ConfigurationName)"=="Release" xcopy "$(SolutionDir)bin\Release\*" "$(ProjectDir)Files" /e /y /i /exclude:$(ProjectDir)NSISInstaller_Build_Exclude.txt
+echo Install Marker -- Delete to make JLE portable, but be careful NOT to do this to your installation! (i.e. make sure JLE can write to this directory without admin privileges.) &gt; "$(ProjectDir)Files\INSTALLED"
 if "$(ConfigurationName)"=="Release" "%25programfiles(x86)%25\Inno Setup 5\ISCC.exe" "$(ProjectDir)MainInstall.iss"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

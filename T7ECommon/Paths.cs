@@ -21,6 +21,11 @@ namespace T7ECommon
         static public string EnvPath_AllUsersProfile = Environment.GetEnvironmentVariable("allusersprofile");
         static public string EnvPath = Environment.GetEnvironmentVariable("Path");
 
+        static public string WebPath_OfficialSite = "http://code.google.com/p/jumplist-extender";
+        static public string WebPath_DonateSite = "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4JEHM8794PVQE";
+        static public string WebPath_UpdateUrl = "http://sites.google.com/site/jumplistextenders/files/UpdateCheck2.txt";
+        static public string WebPath_PacksSite = "http://code.google.com/p/jumplist-extender/downloads/list?q=label:JumplistPack";
+
         #endregion
 
         #region Utilities

@@ -1,2 +1,4 @@
 .lnk
 .pdb
+.locked
+.vshost.exe

@@ -14,7 +14,7 @@ namespace T7EPreferences
 {
     public partial class Donate : Form
     {
-        public Donate(Primary parent, bool foreground)
+        public Donate(bool deliberate)
         {
             InitializeComponent();
 
@@ -30,7 +30,17 @@ namespace T7EPreferences
 
             //if (Screen.PrimaryScreen.WorkingArea.Width - Location.X < this.Width) this.Location = new Point(Screen.PrimaryScreen.WorkingArea.Width - this.Width, Location.Y);
             this.Icon = Primary.PrimaryIcon;
-            if (foreground) { CenterToScreen(); checkBox2.Enabled = checkBox2.Visible = false; label1.Text = "Got simoleons?"; }
+            CenterToScreen();
+            bool donateDialogDisable = false;
+            bool.TryParse(Common.ReadPref("DonateDialogDisable"), out donateDialogDisable);
+            checkBox2.Checked = donateDialogDisable;
+            if (deliberate) {
+                bool donateBalloonShown = false;
+                bool.TryParse(Common.ReadPref("DonateBalloonShown"), out donateBalloonShown);
+                checkBox2.Enabled = checkBox2.Visible = donateBalloonShown;
+                checkBox2.Text = "Disable balloon alert"; 
+            }
+            else { if (donateDialogDisable) { Close(); } }
         }
 
         private string getDefaultBrowser()
@@ -74,14 +84,14 @@ namespace T7EPreferences
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
             DisableForm = checkBox2.Checked;
-            if (DisableForm && button1.Text == "OK")
+            /*if (DisableForm && button1.Text == "OK")
             {
-                button1.Text = "Aww :(";
+                button1.Text = "OK";
             }
             else if(!DisableForm && button1.Text == "Aww :(")
             {
                 button1.Text = "OK";
-            }
+            }*/
             Common.WritePref("DonateDialogDisable", DisableForm.ToString());
         }
 

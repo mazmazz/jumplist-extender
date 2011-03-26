@@ -59,7 +59,12 @@ namespace T7EPreferences
         private void CheckNewVersion()
         {
             if (!File.Exists(Path.Combine(Common.Path_AppData, "UpdateCheck2.txt"))) return;
-
+            if (!Common.SanitizeUpdateResponse(File.ReadAllText(Path.Combine(Common.Path_AppData, "UpdateCheck2.txt"))))
+            {
+                File.Delete(Path.Combine(Common.Path_AppData, "UpdateCheck2.txt"));
+                return;
+            }
+            
             try
             {
                 string[] versionCheckParts = File.ReadAllText(Path.Combine(Common.Path_AppData, "UpdateCheck2.txt")).Split('|');
@@ -104,10 +109,10 @@ namespace T7EPreferences
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            /*System.Diagnostics.Process.Start("explorer.exe", "\"http://jumplist.gsdn-media.com/packs\"");
+            /*System.Diagnostics.Process.Start("explorer.exe", "\"Common.WebPath_PacksSite"");
             this.WindowState = FormWindowState.Minimized;*/
 
-            Process.Start("explorer.exe", "http://jumplist.gsdn-media.com");
+            Process.Start("explorer.exe", "\"" + Common.WebPath_OfficialSite + "\"");
         }
 
         private void StartImportButton_Click(object sender, EventArgs e)
@@ -129,18 +134,43 @@ namespace T7EPreferences
         {
             if ((File.Exists(Path.Combine(Common.Path_AppData, "UpdateCheck2.txt"))
                 && File.GetCreationTime(Path.Combine(Common.Path_AppData, "UpdateCheck2.txt")).Day - DateTime.Now.Day <= -1)
-                || !File.Exists(Path.Combine(Common.Path_AppData, "UpdateCheck2.txt")))
+                || !File.Exists(Path.Combine(Common.Path_AppData, "UpdateCheck2.txt"))
+                || !Common.SanitizeUpdateResponse(File.ReadAllText(Path.Combine(Common.Path_AppData, "UpdateCheck2.txt"))))
             {
-                try { new WebClient().DownloadFile("http://jumplist.gsdn-media.com/UpdateCheck2.txt", Path.Combine(Common.Path_AppData, "UpdateCheck2.txt")); }
+                try {
+                    string updateResult = new WebClient().DownloadString(Common.WebPath_UpdateUrl);
+                    
+                    if(Common.SanitizeUpdateResponse(updateResult))
+                        File.WriteAllText(Path.Combine(Common.Path_AppData, "UpdateCheck2.txt"), updateResult);                   
+                }
                 catch (Exception ee) { /* Fail silently. */ }
             }
         }
 
         private void DonatePictureBox_Click(object sender, EventArgs e)
         {
-            Process.Start("explorer.exe", "http://jumplist.gsdn-media.com/wiki/Site:Donate");
+            Process.Start("explorer.exe", "\"" + Common.WebPath_DonateSite + "\"");
             this.WindowState = FormWindowState.Minimized;
             //PrimaryForm.ShowDonateDialog(true);
+        }
+
+        private void StartForm_Shown(object sender, EventArgs e)
+        {
+            DateTime installDate = DateTime.Today;
+            bool installUpgrade = false;
+            DateTime.TryParse(Common.ReadPref("InstallDate"), out installDate);
+            bool.TryParse(Common.ReadPref("InstallUpgrade"), out installUpgrade);
+            if ((DateTime.Today - installDate).Days >= 3 || installUpgrade == true)
+            {
+                //bool donateDialogDisable = false;
+                //bool.TryParse(Common.ReadPref("DonateDialogDisable"), out donateDialogDisable);
+                //if (!donateDialogDisable)
+                //{
+                Donate donationWindow = new Donate(true);
+                donationWindow.Show();
+                //}
+
+            }
         }
 
         

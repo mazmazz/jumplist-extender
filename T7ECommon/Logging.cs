@@ -13,9 +13,9 @@ namespace T7ECommon
     public partial class Common
     {
         static string MailUserName = "jumplist.extender@gmail.com";
-        //static string MailPassword = ""; //This must be filled in
+        static string MailPassword = ""; //This must be filled in
         static string MailRecipient = "digimarco35@yahoo.com";
-        static string MailVersion = "v0.2-C";
+        static string MailVersion = "v0.3";
 
         static public void SendExceptionLog(Exception e)
         {
@@ -56,7 +56,7 @@ namespace T7ECommon
                     + MailVersion 
                     + " Exception: " + Environment.UserName);
                 MailAddress toAddress = new MailAddress(Common.MailRecipient, "JLE Developer");
-                string fromPassword = "bogus";
+                string fromPassword = Common.MailPassword;
                 string subject = "JLEx: " + e.Message;
                 string body = GetExceptionLogBody(e, appName, appPath, appWindowClassName, appId);
 
@@ -113,8 +113,9 @@ namespace T7ECommon
                 output += "Path_AppData: " + Common.Path_AppData + Environment.NewLine;
                 output += Environment.NewLine;
                 output += "Env64: " + Common.Env64.ToString() + Environment.NewLine;
+                output += "Windows Version: " + Environment.OSVersion.VersionString + Environment.NewLine;
                 //output += "EnvInstalled: " + Common.EnvInstalled.ToString() + Environment.NewLine;
-                output += "Version: " + Common.MailVersion + Environment.NewLine;
+                output += "JLE Version: " + Common.MailVersion + Environment.NewLine;
 
                 output += appName != null && appName.Length > 0 ? "AppName: " + appName + Environment.NewLine
                     : "";

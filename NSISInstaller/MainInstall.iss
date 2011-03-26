@@ -1,9 +1,9 @@
 [Setup]
-OutputBaseFilename=JumplistExtender_v0.2-B
-VersionInfoVersion=0.2.3
-VersionInfoProductVersion=0.2.3
-AppVerName=Version 0.2-C
-AppVersion=0.2-C
+OutputBaseFilename=JumplistExtender_v0.3
+VersionInfoVersion=0.3.0
+VersionInfoProductVersion=0.3.0
+AppVerName=Version 0.3
+AppVersion=0.3
 VersionInfoCompany=Marco Zafra
 VersionInfoDescription=A custom jumplist creator for any program on Windows 7
 VersionInfoCopyright=Released under GPLv3
@@ -18,9 +18,9 @@ ChangesAssociations=true
 RestartIfNeededByRun=true
 SetupIconFile=PrimaryIcon.ico
 AppPublisher=Marco Zafra
-AppPublisherURL=http://jumplist.gsdn-media.com
-AppSupportURL=http://jumplist.gsdn-media.com
-AppUpdatesURL=http://jumplist.gsdn-media.com
+AppPublisherURL=http://code.google.com/p/jumplist-extender
+AppSupportURL=http://code.google.com/p/jumplist-extender
+AppUpdatesURL=http://code.google.com/p/jumplist-extender
 AppID={{2D5349D5-167D-4D27-BD8C-9117A6C63FED}
 UninstallDisplayName=Jumplist Extender
 DefaultDirName={pf}\JumplistExtender
@@ -32,6 +32,8 @@ AlwaysUsePersonalGroup=true
 ;Name: {app}\T7EPreferences.exe; Type: files
 ;Name: {app}\T7EBackground.exe; Type: files
 ;Name: {app}\NSISInstaller.exe; Type: files
+Type: files; Name: "{commonstartup}\Jumplist Extender Applicator.lnk"
+Type: files; Name: "{userstartup}\Jumplist Extender Applicator.lnk"
 
 [Files]
 ;------ add IssProc (Files In Use Extension)
@@ -44,17 +46,17 @@ Source: Files\Defaults\Icons\*; DestDir: {app}\Defaults\Icons; Flags: recursesub
 [Icons]
 Name: {group}\Jumplist Extender; Filename: {app}\T7EPreferences.exe; WorkingDir: {app}; Comment: Create custom jumplists for any program on Windows 7.; IconIndex: 0
 Name: {app}\Defaults\Icons\[00] shell32.dll; Filename: {sys}\shell32.dll
-Name: {userstartup}\Jumplist Extender Applicator; Filename: {app}\T7EBackground.exe; WorkingDir: {app}
 
 [Registry]
 Root: HKCR; Subkey: .jlp; ValueType: string; ValueName: ; ValueData: JumplistPack; Flags: uninsdeletevalue
 Root: HKCR; Subkey: JumplistPack; ValueType: string; ValueName: ; ValueData: Jumplist Pack; Flags: uninsdeletekey
 Root: HKCR; Subkey: JumplistPack\DefaultIcon; ValueType: string; ValueName: ; ValueData: {app}\T7EPreferences.exe,0
 Root: HKCR; Subkey: JumplistPack\shell\open\command; ValueType: string; ValueName: ; ValueData: """{app}\T7EPreferences.exe"" ""%1"""
+Root: HKCU; Subkey: Software\Microsoft\Windows\CurrentVersion\Run; ValueType: string; ValueName: JumplistWatcher; ValueData: {app}\T7EBackground.exe; Flags: uninsdeletekey
 
 
 [Run]
-Filename: {app}\NSISInstaller.exe; Parameters: /inst:{{90fd0530-b663-4fe7-9291-189031b47993}; StatusMsg: Applying jump list settings; Flags: runminimized runasoriginaluser
+Filename: {app}\NSISInstaller.exe; Parameters: /inst:{{90fd0530-b663-4fe7-9291-189031b47993}; StatusMsg: Applying jump list settings; Flags: runascurrentuser runhidden
 Filename: {app}\T7EBackground.exe; WorkingDir: {app}; Flags: runasoriginaluser nowait
 Filename: {app}\T7EPreferences.exe; WorkingDir: {app}; Description: Start Jumplist Extender; Flags: postinstall runasoriginaluser nowait
 

@@ -32,11 +32,12 @@
             this.TrayIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.TrayIconContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.TrayIconContextMenuOpenSettings = new System.Windows.Forms.ToolStripMenuItem();
+            this.visitTheOfficialWebsiteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.updateToVersion0ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.TrayIconContextMenuExit = new System.Windows.Forms.ToolStripMenuItem();
             this.UpdateTimer = new System.Windows.Forms.Timer(this.components);
-            this.visitTheOfficialWebsiteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.DonateTimer = new System.Windows.Forms.Timer(this.components);
             this.TrayIconContextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -67,6 +68,13 @@
             this.TrayIconContextMenuOpenSettings.Text = "&Open Settings";
             this.TrayIconContextMenuOpenSettings.Click += new System.EventHandler(this.TrayIconContextMenuOpenSettings_Click);
             // 
+            // visitTheOfficialWebsiteToolStripMenuItem
+            // 
+            this.visitTheOfficialWebsiteToolStripMenuItem.Name = "visitTheOfficialWebsiteToolStripMenuItem";
+            this.visitTheOfficialWebsiteToolStripMenuItem.Size = new System.Drawing.Size(231, 22);
+            this.visitTheOfficialWebsiteToolStripMenuItem.Text = "&Visit the Official Website";
+            this.visitTheOfficialWebsiteToolStripMenuItem.Click += new System.EventHandler(this.visitTheOfficialWebsiteToolStripMenuItem_Click);
+            // 
             // updateToVersion0ToolStripMenuItem
             // 
             this.updateToVersion0ToolStripMenuItem.Enabled = false;
@@ -93,12 +101,10 @@
             this.UpdateTimer.Interval = 86400000;
             this.UpdateTimer.Tick += new System.EventHandler(this.UpdateTimer_Tick);
             // 
-            // visitTheOfficialWebsiteToolStripMenuItem
+            // DonateTimer
             // 
-            this.visitTheOfficialWebsiteToolStripMenuItem.Name = "visitTheOfficialWebsiteToolStripMenuItem";
-            this.visitTheOfficialWebsiteToolStripMenuItem.Size = new System.Drawing.Size(231, 22);
-            this.visitTheOfficialWebsiteToolStripMenuItem.Text = "&Visit the Official Website";
-            this.visitTheOfficialWebsiteToolStripMenuItem.Click += new System.EventHandler(this.visitTheOfficialWebsiteToolStripMenuItem_Click);
+            this.DonateTimer.Interval = 1800000;
+            this.DonateTimer.Tick += new System.EventHandler(this.DonateTimer_Tick);
             // 
             // Primary
             // 
@@ -126,5 +132,6 @@
         private System.Windows.Forms.Timer UpdateTimer;
         private System.Windows.Forms.ToolStripMenuItem updateToVersion0ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem visitTheOfficialWebsiteToolStripMenuItem;
+        private System.Windows.Forms.Timer DonateTimer;
     }
 }

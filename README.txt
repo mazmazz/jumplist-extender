@@ -16,7 +16,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 INTRO
 
-Thanks for downloading the Jumplist Extender (J7E) v1.0 source! J7E is written primarily in C#, and its contents consist of:
+Thanks for downloading the Jumplist Extender (JLE) v0.3 source! JLE is written primarily in C#, and its contents consist of:
 
 /T7EBackground - The background process that assigns windows to their jumplists
 
@@ -32,6 +32,8 @@ Thanks for downloading the Jumplist Extender (J7E) v1.0 source! J7E is written p
 /Extras - Extra standalone code snippets, e.g. beta jumplist code or sandbox tests. These are not compiled with the other projects.
 
 The main solution will build into /bin, with everything you need to run the complete program.
+
+To build an installation file, first install InnoSetup 5 or later. Then build NSISInstaller /by itself/ to activate the post-build actions that produce the install. (For some reason, it does not work when building the whole solution.)
 
 
 LICENSE
@@ -56,7 +58,7 @@ You can download the C++ source at http://www.autohotkey.com/download/
 
 WARNING
 
-Jumplist Extender v1.0's source is VERY, VERY messy! Explore at your own peril!
+Jumplist Extender v0.3's source is VERY, VERY messy! Explore at your own peril!
 
 Code cleanup is on the roadmap for v2.0.
 

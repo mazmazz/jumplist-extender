@@ -51,6 +51,8 @@ namespace T7EPreferences
             this.keyboardShortcutHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuToolsSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.donateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.visitTheOfficialWebsiteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.MenuToolsAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.updateToVersion0ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.StatusBar = new System.Windows.Forms.StatusStrip();
@@ -131,8 +133,7 @@ namespace T7EPreferences
             this.ProgramNameTextBox = new System.Windows.Forms.TextBox();
             this.ProgramNameLabel = new System.Windows.Forms.Label();
             this.TabControl = new System.Windows.Forms.TabControl();
-            this.visitTheOfficialWebsiteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.disableDonationBalloonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuStrip.SuspendLayout();
             this.StatusBar.SuspendLayout();
             this.AddButtonContextMenuStrip.SuspendLayout();
@@ -256,6 +257,7 @@ namespace T7EPreferences
             this.keyboardShortcutHelpToolStripMenuItem,
             this.MenuToolsSeparator1,
             this.donateToolStripMenuItem,
+            this.disableDonationBalloonToolStripMenuItem,
             this.visitTheOfficialWebsiteToolStripMenuItem,
             this.toolStripSeparator1,
             this.MenuToolsAbout});
@@ -290,6 +292,18 @@ namespace T7EPreferences
             this.donateToolStripMenuItem.Size = new System.Drawing.Size(264, 22);
             this.donateToolStripMenuItem.Text = "&Donate to Jumplist Extender!";
             this.donateToolStripMenuItem.Click += new System.EventHandler(this.donateToolStripMenuItem_Click);
+            // 
+            // visitTheOfficialWebsiteToolStripMenuItem
+            // 
+            this.visitTheOfficialWebsiteToolStripMenuItem.Name = "visitTheOfficialWebsiteToolStripMenuItem";
+            this.visitTheOfficialWebsiteToolStripMenuItem.Size = new System.Drawing.Size(264, 22);
+            this.visitTheOfficialWebsiteToolStripMenuItem.Text = "&Visit the Official Website";
+            this.visitTheOfficialWebsiteToolStripMenuItem.Click += new System.EventHandler(this.visitTheOfficialWebsiteToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(261, 6);
             // 
             // MenuToolsAbout
             // 
@@ -1302,17 +1316,13 @@ namespace T7EPreferences
             this.TabControl.SelectedIndexChanged += new System.EventHandler(this.TabControl_SelectedIndexChanged);
             this.TabControl.SizeChanged += new System.EventHandler(this.TabControl_SizeChanged);
             // 
-            // visitTheOfficialWebsiteToolStripMenuItem
+            // disableDonationBalloonToolStripMenuItem
             // 
-            this.visitTheOfficialWebsiteToolStripMenuItem.Name = "visitTheOfficialWebsiteToolStripMenuItem";
-            this.visitTheOfficialWebsiteToolStripMenuItem.Size = new System.Drawing.Size(264, 22);
-            this.visitTheOfficialWebsiteToolStripMenuItem.Text = "&Visit the Official Website";
-            this.visitTheOfficialWebsiteToolStripMenuItem.Click += new System.EventHandler(this.visitTheOfficialWebsiteToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(261, 6);
+            this.disableDonationBalloonToolStripMenuItem.CheckOnClick = true;
+            this.disableDonationBalloonToolStripMenuItem.Name = "disableDonationBalloonToolStripMenuItem";
+            this.disableDonationBalloonToolStripMenuItem.Size = new System.Drawing.Size(264, 22);
+            this.disableDonationBalloonToolStripMenuItem.Text = "Disable Donation Balloon";
+            this.disableDonationBalloonToolStripMenuItem.Click += new System.EventHandler(this.disableDonationBalloonToolStripMenuItem_Click);
             // 
             // Primary
             // 
@@ -1465,6 +1475,7 @@ namespace T7EPreferences
         private System.Windows.Forms.ToolStripMenuItem updateToVersion0ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem visitTheOfficialWebsiteToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem disableDonationBalloonToolStripMenuItem;
     }
 }
 

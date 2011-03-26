@@ -1,3 +1,13 @@
+If you are upgrading or reinstalling, close the Jumplist Extender tray icon first.
+
+===VERSION 0.3===
+Version 0.3 is a '''MAJOR BUG FIX''' release.
+
+''FIXED:''
+* '''Non-English systems would not apply jump lists to the taskbar.'''
+* Broken update check would display weird code in the menus.
+* Old web links were broken.
+
 ===Version 0.2-C===
 Version 0.2-C is a '''MINOR BUG FIX''' release.
 

@@ -65,11 +65,12 @@ namespace T7ECommon
                 Fail("AppList.xml does not exist in program directory.", 1);
             else if (!File.Exists(Path.Combine(programFilesDir, "AutoHotKey.exe")))
                 Fail("AutoHotKey.exe does not exist in program directory.", 1);
-            else if (!File.Exists(Path.Combine(programFilesDir, "PinShortcut.vbs")))
-                Fail("PinShortcut.vbs does not exist in program directory.", 1);
+            /*else if (!File.Exists(Path.Combine(programFilesDir, "PinShortcut.vbs")))
+                Fail("PinShortcut.vbs does not exist in program directory.", 1);*/
 
             #region Directories
             // Check appdata directories
+            //System.Windows.Forms.MessageBox.Show(appDataDir);
             if (!Directory.Exists(appDataDir))
             {
                 try { Directory.CreateDirectory(appDataDir); }
@@ -138,6 +139,24 @@ namespace T7ECommon
                     target.CreateSubdirectory(diSourceSubDir.Name);
                 CopyAll(diSourceSubDir, nextTargetSubDir);
             }
+        }
+
+        public static bool SanitizeUpdateResponse(string updateResponse)
+        {
+            // UpdateCheck2.txt format:
+            // New assembly version|Update page URL|New version display
+            // 0.2.3802.42522|http://jumplist.gsdn-media.com/site/Website:Update|0.2-C
+            // TODO: Best thing to do is to see if string splits properly, but too lazy
+            // to figure out how.
+            // Example failure cases: 404 HTML page, domain name registrar page,
+            // plaintext "file not found"
+
+            if (updateResponse.Length <= 2) return false; // Must have the two delineating |s
+            else if (updateResponse.Length > 2083) return false; // Internet Explorer's URL character limit is 2083. 
+            else if (!updateResponse.Contains('|')) return false; // Must have |s
+            else if (updateResponse.Contains('<')) return false; // If there's a < in the string, then it's likely HTML.
+
+            else return true;
         }
     }
 }

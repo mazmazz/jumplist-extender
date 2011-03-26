@@ -33,7 +33,7 @@ namespace NSISInstaller
             {
                 Title = "Visit the official website",
                 Path = "%windir%\\explorer.exe",
-                Arguments = "\"http://jumplist.gsdn-media.com\"",
+                Arguments = "\""+Common.WebPath_OfficialSite+"\"",
                 IconReference = new IconReference(Path.Combine(Common.EnvPath_SystemRoot, "system32\\shell32.dll"), 135)
             });
             ownList.Refresh();
@@ -180,9 +180,19 @@ namespace NSISInstaller
             if (File.Exists(Path.Combine(Common.Path_AppData, "Icons\\[00] shell32.dll")))
                 File.Delete(Path.Combine(Common.Path_AppData, "Icons\\[00] shell32.dll"));
 
+            if (File.Exists(Path.Combine(Common.Path_ProgramFiles, "PinShortcut.vbs")))
+                File.Delete(Path.Combine(Common.Path_ProgramFiles, "PinShortcut.vbs"));
+
+            if (File.Exists(Path.Combine(Common.Path_AppData, "UpdateCheck2.txt")))
+                File.Delete(Path.Combine(Common.Path_AppData, "UpdateCheck2.txt"));
+
+            if (File.Exists(Path.Combine(Common.Path_AppData, "UpdateCheck.txt")))
+                File.Delete(Path.Combine(Common.Path_AppData, "UpdateCheck.txt"));
+
             // Copy files to AppData, if needed
             string appDataDir = Common.Path_AppData;
             string programFilesDir = Common.Path_ProgramFiles;
+            //MessageBox.Show(appDataDir);
             if (!Directory.Exists(appDataDir))
             {
                 try { Directory.CreateDirectory(appDataDir); }
@@ -916,38 +926,53 @@ namespace NSISInstaller
         [DllImport("user32.dll")]
         static extern bool EnumWindows(EnumWindowsProc lpEnumFunc, IntPtr lParam);
 
+        public string GetStringResource(IntPtr hModuleInstance, uint uiStringID)
+        {
+            StringBuilder sb = new StringBuilder(255);
+            Interop.LoadString(hModuleInstance, uiStringID, sb, sb.Capacity + 1);
+            return sb.ToString();
+        }
+
         private void UnpinShortcut(string lnkPath)
         {
-            ProcessStartInfo startInfo = new ProcessStartInfo();
-            startInfo.FileName = "cscript.exe";
-            startInfo.Arguments = "\"" + Path.Combine(Common.Path_ProgramFiles, "PinShortcut.vbs") + "\" /unpin \"" + Path.GetDirectoryName(lnkPath) + "\" \"" + Path.GetFileName(lnkPath) + "\"";
-            startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            // Unpinning shortcuts is under UnpinShortcut()
+            IntPtr shell32Module = Interop.GetModuleHandle("shell32.dll");
 
-            Process pinProcess = new Process();
-            pinProcess.StartInfo = startInfo;
-            pinProcess.Start();
-            pinProcess.WaitForExit();
+            string command;
+            if (lnkPath.Contains("StartMenu"))
+                command = GetStringResource(shell32Module, 5382); // Unpin from Start Men&u
+            else
+                command = GetStringResource(shell32Module, 5387); // Unpin from Tas&kbar
+
+            int iRetVal;
+            iRetVal = (int)Interop.ShellExecute(
+                this.Handle,
+                command,
+                lnkPath,
+                "",
+                "",
+                Interop.ShowCommands.SW_HIDE);
         }
 
         private void PinShortcut(string lnkPath, bool pinStartMenu)
         {
+            // Unpinning shortcuts is under UnpinShortcut()
+            IntPtr shell32Module = Interop.GetModuleHandle("shell32.dll");
             
-
             string command;
             if (pinStartMenu)
-                command = "/pinStart";
+                command = GetStringResource(shell32Module, 5381); // Pin to Start Men&u
             else
-                command = "/pinTaskbar";
+                command = GetStringResource(shell32Module, 5386); // Pin to Tas&kbar
 
-            ProcessStartInfo startInfo = new ProcessStartInfo();
-            startInfo.FileName = "cscript.exe";
-            startInfo.Arguments = "\"" + Path.Combine(Common.Path_ProgramFiles, "PinShortcut.vbs") + "\" " + command + " \"" + Path.GetDirectoryName(lnkPath) + "\" \"" + Path.GetFileName(lnkPath) + "\"";
-            startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-
-            Process pinProcess = new Process();
-            pinProcess.StartInfo = startInfo;
-            pinProcess.Start();
-            pinProcess.WaitForExit();
+            int iRetVal;
+            iRetVal = (int)Interop.ShellExecute(
+                this.Handle,
+                command,
+                lnkPath,
+                "",
+                "",
+                Interop.ShowCommands.SW_HIDE);
         }
     }
 }

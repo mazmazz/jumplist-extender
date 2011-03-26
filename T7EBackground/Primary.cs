@@ -108,6 +108,8 @@ namespace T7EBackground
             UpdateTimer.Start();
         }
 
+        private string TrayIconPath;
+
         /// <summary>
         /// Initializes T7EBackground.
         /// </summary>
@@ -117,9 +119,9 @@ namespace T7EBackground
             PrimaryIcon = new Icon(Resource1.PrimaryIcon, 256, 256);
             this.Icon = PrimaryIcon;
             TrayIcon.Icon = PrimaryIcon;
-            MessageBox.Show("fucik");
+            //MessageBox.Show("fucik");
             LogTxtFile = new StreamWriter(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "T7EBackgroundLog_"+DateTime.Now.Hour.ToString()+DateTime.Now.Minute.ToString()+DateTime.Now.Second.ToString()+".txt"));
-            MessageBox.Show("fidld");
+            //MessageBox.Show("fidld");
             CommonLog("Starting T7EBackground Primary Form", 1);
             
             // Initialize variables
@@ -158,6 +160,8 @@ namespace T7EBackground
             CheckUpdateString();
             StartUpdateTimer();
             CommonLog("Finished update check sequence");
+
+            DonateTimer.Start();
 
             CommonLog("Finished Primary Form start-up.", 0);
         }
@@ -239,14 +243,26 @@ namespace T7EBackground
             {
                 if ((File.Exists(Path.Combine(Common.Path_AppData, "UpdateCheck2.txt"))
                     && File.GetCreationTime(Path.Combine(Common.Path_AppData, "UpdateCheck2.txt")).Day - DateTime.Now.Day <= -1)
-                    || !File.Exists(Path.Combine(Common.Path_AppData, "UpdateCheck2.txt")))
+                    || !File.Exists(Path.Combine(Common.Path_AppData, "UpdateCheck2.txt"))
+                    || !Common.SanitizeUpdateResponse(File.ReadAllText(Path.Combine(Common.Path_AppData, "UpdateCheck2.txt"))))
                 {
-                    try { new WebClient().DownloadFile("http://jumplist.gsdn-media.com/UpdateCheck2.txt", Path.Combine(Common.Path_AppData, "UpdateCheck2.txt")); }
+                    try
+                    {
+                        string updateResult = new WebClient().DownloadString(Common.WebPath_UpdateUrl);
+
+                        if (Common.SanitizeUpdateResponse(updateResult))
+                            File.WriteAllText(Path.Combine(Common.Path_AppData, "UpdateCheck2.txt"), updateResult);
+                    }
                     catch (Exception ee) { /* Fail silently. */ }
                 }
             }
 
             if (!File.Exists(Path.Combine(Common.Path_AppData, "UpdateCheck2.txt"))) return;
+            if (!Common.SanitizeUpdateResponse(File.ReadAllText(Path.Combine(Common.Path_AppData, "UpdateCheck2.txt"))))
+            {
+                File.Delete(Path.Combine(Common.Path_AppData, "UpdateCheck2.txt"));
+                return;
+            }
 
             try
             {
@@ -270,6 +286,7 @@ namespace T7EBackground
                         versionCheckParts.Length >= 3 ? versionCheckParts[2]
                         : versionCheckParts[0].Substring(0, 3));
                     TrayIcon.BalloonTipText = "Click to download.";
+                    TrayIconPath = Common.WebPath_UpdateUrl;
                     UpdatePath = versionCheckParts[1];
                     TrayIcon.ShowBalloonTip(1000); // Show for 10 seconds; msdn default
                 }
@@ -280,18 +297,43 @@ namespace T7EBackground
 
         private void TrayIcon_BalloonTipClicked_Update(object sender, EventArgs e)
         {
-            Process.Start("explorer.exe", UpdatePath);
+            Process.Start("explorer.exe", "\""+TrayIconPath+"\"");
         }
 
         private void updateToVersion0ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start("explorer.exe", UpdatePath);
+            Process.Start("explorer.exe", "\"" + TrayIconPath + "\"");
         }
 
         private void UpdateTimer_Tick(object sender, EventArgs e)
         {
+            ShowDonateBalloon();
+
             // Check UpdateCheck2.txt
             CheckUpdateString();
+        }
+
+        private void ShowDonateBalloon()
+        {
+            // Show donate dialog
+            DateTime installDate = DateTime.Today;
+            bool installUpgrade = false;
+            DateTime.TryParse(Common.ReadPref("InstallDate"), out installDate);
+            bool.TryParse(Common.ReadPref("InstallUpgrade"), out installUpgrade);
+            if ((DateTime.Today - installDate).Days >= 3 || installUpgrade == true)
+            {
+                bool donateDialogDisable = false;
+                bool.TryParse(Common.ReadPref("DonateDialogDisable"), out donateDialogDisable);
+                if (!donateDialogDisable)
+                {
+                    TrayIcon.BalloonTipIcon = ToolTipIcon.Info;
+                    TrayIcon.BalloonTipTitle = "Please consider donating";
+                    TrayIcon.BalloonTipText = "Jumplist Extender may have been very helpful to you, and I'm a struggling student who worked hard on it. Why not donate to help me out?\r\n\r\nIt costs less than an average meal, and you'll also help me make Extender even better. Thank you for your help!\r\n(This alert can be disabled in the Settings, under \"Tools\".)";
+                    TrayIconPath = Common.WebPath_DonateSite;
+                    TrayIcon.ShowBalloonTip(1000); // Show for 10 seconds; msdn default
+                    Common.WritePref("DonateBalloonShown", true.ToString());
+                }
+            }
         }
 
         private void UpdateWatcher_Changed(object sender, EventArgs e)
@@ -414,7 +456,7 @@ namespace T7EBackground
 
         private void visitTheOfficialWebsiteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start("explorer.exe", "http://jumplist.gsdn-media.com");
+            Process.Start("explorer.exe", "\"" + Common.WebPath_OfficialSite + "\"");
         }
 
         #region Logging
@@ -465,5 +507,11 @@ namespace T7EBackground
             }
         }
         #endregion
+
+        private void DonateTimer_Tick(object sender, EventArgs e)
+        {
+            DonateTimer.Stop();
+            ShowDonateBalloon();
+        }
     }
 }

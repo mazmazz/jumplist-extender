@@ -68,7 +68,7 @@
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(94, 29);
             this.button2.TabIndex = 7;
-            this.button2.Text = "Donate!";
+            this.button2.Text = "Donate";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
@@ -79,21 +79,21 @@
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(359, 60);
             this.label3.TabIndex = 6;
-            this.label3.Text = "It costs less than lunch in New York, and you\'ll also help make Extender even BET" +
-                "TER! All donations are GREATLY appreciated!";
+            this.label3.Text = "It costs less than an average meal, and you\'ll also help me make Extender even be" +
+                "tter. Your donation will be appreciated greatly!";
             // 
             // linkLabel2
             // 
             this.linkLabel2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.linkLabel2.AutoSize = true;
-            this.linkLabel2.Location = new System.Drawing.Point(56, 78);
+            this.linkLabel2.Location = new System.Drawing.Point(92, 78);
             this.linkLabel2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.linkLabel2.Name = "linkLabel2";
-            this.linkLabel2.Size = new System.Drawing.Size(295, 17);
+            this.linkLabel2.Size = new System.Drawing.Size(210, 17);
             this.linkLabel2.TabIndex = 5;
             this.linkLabel2.TabStop = true;
-            this.linkLabel2.Text = "Why not donate Five Bucks to help me out? :)";
+            this.linkLabel2.Text = "Why not donate to help me out?";
             this.linkLabel2.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel2_LinkClicked);
             // 
             // pictureBox1
@@ -118,8 +118,7 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(359, 35);
             this.label2.TabIndex = 1;
-            this.label2.Text = "Jumplist Extender is my personal project, and I\'m also a struggling, poor college" +
-                " student...";
+            this.label2.Text = "Jumplist Extender is my personal project, and I\'m also a struggling student.";
             // 
             // label1
             // 
@@ -128,9 +127,9 @@
             this.label1.Location = new System.Drawing.Point(11, 9);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(140, 20);
+            this.label1.Size = new System.Drawing.Size(150, 20);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Got five bucks?";
+            this.label1.Text = "Please consider:";
             // 
             // checkBox2
             // 

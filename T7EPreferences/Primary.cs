@@ -171,30 +171,26 @@ namespace T7EPreferences
                 }
             }
 
+
+
             else
                 ShowStartDialog();
 
-            // After everything shows, show the donate dialog
-            DateTime installDate = DateTime.Today;
-            bool installUpgrade = false;
-            DateTime.TryParse(Common.ReadPref("InstallDate"), out installDate);
-            bool.TryParse(Common.ReadPref("InstallUpgrade"), out installUpgrade);
-            if ((DateTime.Today - installDate).Days >= 3 || installUpgrade == true)
-            {
-                bool donateDialogDisable = false;
-                bool.TryParse(Common.ReadPref("DonateDialogDisable"), out donateDialogDisable);
-                if (!donateDialogDisable) ShowDonateDialog(false);
-            }
+            //bool donateDialogDisable = false;
+            //bool.TryParse(Common.ReadPref("DonateDialogDisable"), out donateDialogDisable);
+            
+            //disableDonationBalloonToolStripMenuItem.Checked = donateDialogDisable;
+            /*if (disableDonationBalloonToolStripMenuItem.Checked) disableDonationBalloonToolStripMenuItem.CheckState = CheckState.Checked;
+            else disableDonationBalloonToolStripMenuItem.CheckState = CheckState.Unchecked;*/
 
             // And update check
             CheckUpdateString();
         }
 
-        public void ShowDonateDialog(bool foreground)
+        public void ShowDonateDialog(bool deliberate)
         {
-            Donate donateForm = new Donate(this, foreground);
+            Donate donateForm = new Donate(deliberate);
             donateForm.Show();
-            if(!foreground) Interop.SetForegroundWindow(Handle); // Set window back
         }
 
         private void ShowStartDialog()
@@ -2839,8 +2835,9 @@ Ctrl+P -- Export a Jumplist Pack");
 
         private void donateToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start("explorer.exe", "http://jumplist.gsdn-media.com/wiki/Site:Donate");
-            this.WindowState = FormWindowState.Minimized;
+            ShowDonateDialog(true);
+            //Process.Start("explorer.exe", "\""+Common.WebPath_DonateSite+"\"");
+            //this.WindowState = FormWindowState.Minimized;
             //ShowDonateDialog(true);
         }
 
@@ -2859,6 +2856,11 @@ Ctrl+P -- Export a Jumplist Pack");
             // Just check the stored UpdateCheck2.txt.
 
             if (!File.Exists(Path.Combine(Common.Path_AppData, "UpdateCheck2.txt"))) return;
+            if (!Common.SanitizeUpdateResponse(File.ReadAllText(Path.Combine(Common.Path_AppData, "UpdateCheck2.txt"))))
+            {
+                File.Delete(Path.Combine(Common.Path_AppData, "UpdateCheck2.txt"));
+                return;
+            }
 
             try
             {
@@ -2889,7 +2891,12 @@ Ctrl+P -- Export a Jumplist Pack");
 
         private void visitTheOfficialWebsiteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start("explorer.exe", "http://jumplist.gsdn-media.com");
+            Process.Start("explorer.exe", "\"" + Common.WebPath_OfficialSite + "\"");
+        }
+
+        private void disableDonationBalloonToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ShowDonateDialog(true);
         }
     }
 }

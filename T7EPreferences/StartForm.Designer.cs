@@ -249,6 +249,7 @@
             this.Name = "StartForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Jumplist Extender";
+            this.Shown += new System.EventHandler(this.StartForm_Shown);
             this.ExitPanel.ResumeLayout(false);
             this.ExitPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DonatePictureBox)).EndInit();
