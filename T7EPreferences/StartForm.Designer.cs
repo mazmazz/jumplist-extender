@@ -202,13 +202,13 @@
             this.StartOpenButton.BackColor = System.Drawing.Color.Transparent;
             this.StartOpenButton.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.StartOpenButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.StartOpenButton.HelpText = "Open from a list of previously modified programs.";
+            this.StartOpenButton.HelpText = "Open, toggle, or delete a previous jump list.";
             this.StartOpenButton.Location = new System.Drawing.Point(11, 122);
             this.StartOpenButton.Margin = new System.Windows.Forms.Padding(2);
             this.StartOpenButton.Name = "StartOpenButton";
             this.StartOpenButton.Size = new System.Drawing.Size(388, 75);
             this.StartOpenButton.TabIndex = 1;
-            this.StartOpenButton.Text = "&Open a previously saved jumplist";
+            this.StartOpenButton.Text = "&Edit a previously saved jump list";
             this.StartOpenButton.UseVisualStyleBackColor = false;
             this.StartOpenButton.Click += new System.EventHandler(this.StartOpenButton_Click);
             // 
@@ -219,13 +219,13 @@
             this.StartNewButton.BackColor = System.Drawing.Color.Transparent;
             this.StartNewButton.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.StartNewButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.StartNewButton.HelpText = "Start from a program shortcut or EXE file";
+            this.StartNewButton.HelpText = "Start from a program shortcut or executable file";
             this.StartNewButton.Location = new System.Drawing.Point(11, 42);
             this.StartNewButton.Margin = new System.Windows.Forms.Padding(2);
             this.StartNewButton.Name = "StartNewButton";
             this.StartNewButton.Size = new System.Drawing.Size(388, 75);
             this.StartNewButton.TabIndex = 0;
-            this.StartNewButton.Text = "Start a &new jumplist";
+            this.StartNewButton.Text = "Start a &new jump list";
             this.StartNewButton.UseVisualStyleBackColor = false;
             this.StartNewButton.Click += new System.EventHandler(this.StartNewButton_Click);
             // 

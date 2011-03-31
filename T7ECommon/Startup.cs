@@ -13,6 +13,11 @@ namespace T7ECommon
         // Can't null this out.
         private static DateTime TimeLockExpiration = DateTime.Today;
 
+        public static bool DonateCodeExists = false;
+        public static void CheckRegistrationCodes()
+        {
+        }
+
         public static void CheckTimeLock()
         {
             // As of Version 0.2, TimeLock is disabled.
@@ -86,6 +91,15 @@ namespace T7ECommon
             string appDataOrigPropertiesDir = Path.Combine(appDataDir, "OrigProperties");
             if (!Directory.Exists(appDataOrigPropertiesDir))
                 Directory.CreateDirectory(appDataOrigPropertiesDir);
+
+            // bug 68: fixes jump list imports when appDataDir\Icons\Imported does not exist
+            string appDataIconsDir = Path.Combine(appDataDir, "Icons");
+            if (!Directory.Exists(appDataIconsDir))
+                Directory.CreateDirectory(appDataIconsDir);
+
+            string appDataIconsImportedDir = Path.Combine(appDataDir, "Icons\\Imported");
+            if (!Directory.Exists(appDataIconsImportedDir))
+                Directory.CreateDirectory(appDataIconsImportedDir);
             #endregion
 
             // Check essential files

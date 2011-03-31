@@ -7,7 +7,7 @@ using T7EPreferences;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Jumplist Extender")]
-[assembly: AssemblyDescription("Configures custom jumplists for any program on Windows 7.")]
+[assembly: AssemblyDescription("Configures custom jump lists for any program on Windows 7.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Marco Zafra")]
 [assembly: AssemblyProduct("Jumplist Extender")]
@@ -33,5 +33,5 @@ using T7EPreferences;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.3.*")]
+[assembly: AssemblyVersion("0.4.*")]
 //[assembly: AssemblyFileVersion("0.5.*")]

@@ -28,6 +28,9 @@ namespace T7EPreferences
             // Check time-lock
             Common.CheckTimeLock();
 
+            // Check registration codes
+            Common.CheckRegistrationCodes();
+
             // Run T7EBackground, if not running. And not installed.
             if (Process.GetProcessesByName("T7EBackground").Length <= 0)
             {

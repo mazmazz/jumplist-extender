@@ -235,8 +235,10 @@ namespace NSISInstaller
             }
             else
             {
+                // Do we want to keep prefs for a donate code?
                 Common.WritePref("InstallUpgrade", true.ToString()
-                    , "DonateDialogDisable", false.ToString());
+                    , "DonateDialogDisable", false.ToString()
+                    , "DonateBalloonDisable", false.ToString());
             }
 
             // Write library

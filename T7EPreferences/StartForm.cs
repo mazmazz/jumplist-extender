@@ -162,14 +162,14 @@ namespace T7EPreferences
             bool.TryParse(Common.ReadPref("InstallUpgrade"), out installUpgrade);
             if ((DateTime.Today - installDate).Days >= 3 || installUpgrade == true)
             {
-                //bool donateDialogDisable = false;
-                //bool.TryParse(Common.ReadPref("DonateDialogDisable"), out donateDialogDisable);
-                //if (!donateDialogDisable)
-                //{
-                Donate donationWindow = new Donate(true);
-                donationWindow.Show();
-                //}
-
+                // if disabledialog, then show will hide
+                bool donateDialogDisable = false;
+                bool.TryParse(Common.ReadPref("DonateDialogDisable"), out donateDialogDisable);
+                if (!donateDialogDisable)
+                {
+                    Donate donationWindow = new Donate(false);
+                    donationWindow.Show();
+                }
             }
         }
 

@@ -15,7 +15,7 @@ namespace T7ECommon
         static string MailUserName = "jumplist.extender@gmail.com";
         static string MailPassword = ""; //This must be filled in
         static string MailRecipient = "digimarco35@yahoo.com";
-        static string MailVersion = "v0.3";
+        static string MailVersion = "v0.4";
 
         static public void SendExceptionLog(Exception e)
         {
@@ -54,7 +54,7 @@ namespace T7ECommon
                 MailAddress fromAddress = new MailAddress(Common.MailUserName, 
                     "JLE " 
                     + MailVersion 
-                    + " Exception: " + Environment.UserName);
+                    + ": " + Environment.UserName);
                 MailAddress toAddress = new MailAddress(Common.MailRecipient, "JLE Developer");
                 string fromPassword = Common.MailPassword;
                 string subject = "JLEx: " + e.Message;
@@ -87,8 +87,8 @@ namespace T7ECommon
                     MessageBoxIcon.Error);
             }
 
-            MessageBox.Show("Email sent! Thanks for your consideration! If it's a serious bug, feel free to send mail to digimarco35@yahoo.com, to provide more information!" + Environment.NewLine
-                + "Click \"OK\" to exit.",
+            MessageBox.Show("Email sent! Thanks for your consideration! If this bug happens repeatedly, please file a bug report at\r\n\r\nhttp://code.google.com/p/jumplist-extender/issues/list\r\n\r\nor email me at digimarco35@yahoo.com."
+                + "\r\n\r\nClick \"OK\" to exit.",
                 "Email Sent",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Asterisk);
@@ -189,7 +189,7 @@ namespace T7ECommon
 
         static public void Log(string messageString, int logChange, bool followingLine)
         {
-#if RELEASE
+#if (!DEBUG)
             return;
 #endif
             if (messageString.Length > 0)

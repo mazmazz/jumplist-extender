@@ -120,7 +120,9 @@ namespace T7EBackground
             this.Icon = PrimaryIcon;
             TrayIcon.Icon = PrimaryIcon;
             //MessageBox.Show("fucik");
+#if DEBUG
             LogTxtFile = new StreamWriter(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "T7EBackgroundLog_"+DateTime.Now.Hour.ToString()+DateTime.Now.Minute.ToString()+DateTime.Now.Second.ToString()+".txt"));
+#endif
             //MessageBox.Show("fidld");
             CommonLog("Starting T7EBackground Primary Form", 1);
             
@@ -155,12 +157,14 @@ namespace T7EBackground
             HookAppList();
             CommonLog("Finished starting hooks");
 
+            TrayIconPath = Common.WebPath_DonateSite;
+
             // Hook the update timer -- every 24 hours
             CommonLog("Starting update check sequence");
             CheckUpdateString();
             StartUpdateTimer();
             CommonLog("Finished update check sequence");
-
+            
             DonateTimer.Start();
 
             CommonLog("Finished Primary Form start-up.", 0);
@@ -286,7 +290,7 @@ namespace T7EBackground
                         versionCheckParts.Length >= 3 ? versionCheckParts[2]
                         : versionCheckParts[0].Substring(0, 3));
                     TrayIcon.BalloonTipText = "Click to download.";
-                    TrayIconPath = Common.WebPath_UpdateUrl;
+                    TrayIconPath = versionCheckParts[1];
                     UpdatePath = versionCheckParts[1];
                     TrayIcon.ShowBalloonTip(1000); // Show for 10 seconds; msdn default
                 }
@@ -322,13 +326,13 @@ namespace T7EBackground
             bool.TryParse(Common.ReadPref("InstallUpgrade"), out installUpgrade);
             if ((DateTime.Today - installDate).Days >= 3 || installUpgrade == true)
             {
-                bool donateDialogDisable = false;
-                bool.TryParse(Common.ReadPref("DonateDialogDisable"), out donateDialogDisable);
-                if (!donateDialogDisable)
+                bool donateBalloonDisable = false;
+                bool.TryParse(Common.ReadPref("DonateBalloonDisable"), out donateBalloonDisable);
+                if (!donateBalloonDisable)
                 {
                     TrayIcon.BalloonTipIcon = ToolTipIcon.Info;
                     TrayIcon.BalloonTipTitle = "Please consider donating";
-                    TrayIcon.BalloonTipText = "Jumplist Extender may have been very helpful to you, and I'm a struggling student who worked hard on it. Why not donate to help me out?\r\n\r\nIt costs less than an average meal, and you'll also help me make Extender even better. Thank you for your help!\r\n(This alert can be disabled in the Settings, under \"Tools\".)";
+                    TrayIcon.BalloonTipText = "Jumplist Extender may have been very helpful to you, and I'm a struggling student who worked hard on it. Why not donate to help me out?\r\n\r\nIt costs less than an average meal, and you'll also help me make Extender even better. Thank you for your help!";
                     TrayIconPath = Common.WebPath_DonateSite;
                     TrayIcon.ShowBalloonTip(1000); // Show for 10 seconds; msdn default
                     Common.WritePref("DonateBalloonShown", true.ToString());
@@ -435,8 +439,9 @@ namespace T7EBackground
             CommonLog("Received cleanup signal from Primary_FormClosing: Starting cleanup");
             CleanUp();
             CommonLog("Finished cleanup; passing to FormClosing to close app");
+#if DEBUG
             LogTxtFile.Close();
-
+#endif
         }
 
         /// <summary>
@@ -485,7 +490,7 @@ namespace T7EBackground
 
         static public void CommonLog(string messageString, int logChange, bool followingLine)
         {
-#if RELEASE
+#if (!DEBUG)
             return;
 #endif
             if (messageString.Length > 0)
@@ -512,6 +517,11 @@ namespace T7EBackground
         {
             DonateTimer.Stop();
             ShowDonateBalloon();
+        }
+
+        private void donateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start("explorer.exe", "\"" + Common.WebPath_DonateSite + "\"");
         }
     }
 }

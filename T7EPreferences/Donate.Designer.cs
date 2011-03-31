@@ -38,8 +38,11 @@
             this.label1 = new System.Windows.Forms.Label();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.button1 = new System.Windows.Forms.Button();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.shortcutMenuDisable = new System.Windows.Forms.ToolStripMenuItem();
             this.WhitePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // WhitePanel
@@ -118,7 +121,8 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(359, 35);
             this.label2.TabIndex = 1;
-            this.label2.Text = "Jumplist Extender is my personal project, and I\'m also a struggling student.";
+            this.label2.Text = "Jumplist Extender may have been very helpful to you, and I\'m a struggling student" +
+                " who worked hard on it.";
             // 
             // label1
             // 
@@ -138,9 +142,9 @@
             this.checkBox2.Location = new System.Drawing.Point(14, 232);
             this.checkBox2.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(164, 21);
+            this.checkBox2.Size = new System.Drawing.Size(159, 21);
             this.checkBox2.TabIndex = 1;
-            this.checkBox2.Text = "Don\'t show this again";
+            this.checkBox2.Text = "Disable balloon alert";
             this.checkBox2.UseVisualStyleBackColor = true;
             this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
             // 
@@ -158,6 +162,26 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.shortcutMenuDisable});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 245);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(386, 26);
+            this.menuStrip1.TabIndex = 3;
+            this.menuStrip1.Text = "menuStrip1";
+            this.menuStrip1.Visible = false;
+            // 
+            // shortcutMenuDisable
+            // 
+            this.shortcutMenuDisable.Name = "shortcutMenuDisable";
+            this.shortcutMenuDisable.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D)));
+            this.shortcutMenuDisable.Size = new System.Drawing.Size(65, 22);
+            this.shortcutMenuDisable.Text = "Disable";
+            this.shortcutMenuDisable.Click += new System.EventHandler(this.shortcutMenuDisable_Click);
+            // 
             // Donate
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -166,16 +190,21 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.checkBox2);
             this.Controls.Add(this.WhitePanel);
+            this.Controls.Add(this.menuStrip1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.Name = "Donate";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Donate";
+            this.Shown += new System.EventHandler(this.Donate_Shown);
             this.WhitePanel.ResumeLayout(false);
             this.WhitePanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -192,6 +221,8 @@
         private System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem shortcutMenuDisable;
 
     }
 }

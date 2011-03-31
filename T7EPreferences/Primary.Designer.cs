@@ -51,6 +51,7 @@ namespace T7EPreferences
             this.keyboardShortcutHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuToolsSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.donateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.disableDonationBalloonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.visitTheOfficialWebsiteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.MenuToolsAbout = new System.Windows.Forms.ToolStripMenuItem();
@@ -133,7 +134,8 @@ namespace T7EPreferences
             this.ProgramNameTextBox = new System.Windows.Forms.TextBox();
             this.ProgramNameLabel = new System.Windows.Forms.Label();
             this.TabControl = new System.Windows.Forms.TabControl();
-            this.disableDonationBalloonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.TaskKBDSendInBackgroundCheckBox = new System.Windows.Forms.CheckBox();
+            this.TaskKBDMinimizeAfterwardCheckBox = new System.Windows.Forms.CheckBox();
             this.MenuStrip.SuspendLayout();
             this.StatusBar.SuspendLayout();
             this.AddButtonContextMenuStrip.SuspendLayout();
@@ -197,7 +199,7 @@ namespace T7EPreferences
             this.MenuFileOpen.Name = "MenuFileOpen";
             this.MenuFileOpen.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
             this.MenuFileOpen.Size = new System.Drawing.Size(301, 22);
-            this.MenuFileOpen.Text = "&Open";
+            this.MenuFileOpen.Text = "&Open and Edit Jump Lists";
             this.MenuFileOpen.Click += new System.EventHandler(this.MenuFileOpen_Click);
             // 
             // MenuFileSave
@@ -292,6 +294,13 @@ namespace T7EPreferences
             this.donateToolStripMenuItem.Size = new System.Drawing.Size(264, 22);
             this.donateToolStripMenuItem.Text = "&Donate to Jumplist Extender!";
             this.donateToolStripMenuItem.Click += new System.EventHandler(this.donateToolStripMenuItem_Click);
+            // 
+            // disableDonationBalloonToolStripMenuItem
+            // 
+            this.disableDonationBalloonToolStripMenuItem.Name = "disableDonationBalloonToolStripMenuItem";
+            this.disableDonationBalloonToolStripMenuItem.Size = new System.Drawing.Size(264, 22);
+            this.disableDonationBalloonToolStripMenuItem.Text = "D&isable Donation Balloon";
+            this.disableDonationBalloonToolStripMenuItem.Click += new System.EventHandler(this.disableDonationBalloonToolStripMenuItem_Click);
             // 
             // visitTheOfficialWebsiteToolStripMenuItem
             // 
@@ -539,6 +548,8 @@ namespace T7EPreferences
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.TaskKBDSettingsPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.TaskKBDSettingsPanel.BackColor = System.Drawing.Color.Transparent;
+            this.TaskKBDSettingsPanel.Controls.Add(this.TaskKBDMinimizeAfterwardCheckBox);
+            this.TaskKBDSettingsPanel.Controls.Add(this.TaskKBDSendInBackgroundCheckBox);
             this.TaskKBDSettingsPanel.Controls.Add(this.TaskKBDIgnoreCurrentCheckBox);
             this.TaskKBDSettingsPanel.Controls.Add(this.TaskKBDIgnoreAbsentCheckBox);
             this.TaskKBDSettingsPanel.Controls.Add(this.TaskKBDNewCheckBox);
@@ -553,12 +564,12 @@ namespace T7EPreferences
             // TaskKBDIgnoreCurrentCheckBox
             // 
             this.TaskKBDIgnoreCurrentCheckBox.AutoSize = true;
-            this.TaskKBDIgnoreCurrentCheckBox.Location = new System.Drawing.Point(237, 30);
+            this.TaskKBDIgnoreCurrentCheckBox.Location = new System.Drawing.Point(10, 5);
             this.TaskKBDIgnoreCurrentCheckBox.Margin = new System.Windows.Forms.Padding(2);
             this.TaskKBDIgnoreCurrentCheckBox.Name = "TaskKBDIgnoreCurrentCheckBox";
-            this.TaskKBDIgnoreCurrentCheckBox.Size = new System.Drawing.Size(263, 21);
+            this.TaskKBDIgnoreCurrentCheckBox.Size = new System.Drawing.Size(133, 21);
             this.TaskKBDIgnoreCurrentCheckBox.TabIndex = 6;
-            this.TaskKBDIgnoreCurrentCheckBox.Text = "Ignore if program is currently running";
+            this.TaskKBDIgnoreCurrentCheckBox.Text = "Ignore if running";
             this.TaskKBDIgnoreCurrentCheckBox.UseVisualStyleBackColor = true;
             this.TaskKBDIgnoreCurrentCheckBox.CheckedChanged += new System.EventHandler(this.TaskKBDIgnoreCurrentCheckBox_CheckedChanged);
             // 
@@ -568,9 +579,9 @@ namespace T7EPreferences
             this.TaskKBDIgnoreAbsentCheckBox.Location = new System.Drawing.Point(10, 30);
             this.TaskKBDIgnoreAbsentCheckBox.Margin = new System.Windows.Forms.Padding(2);
             this.TaskKBDIgnoreAbsentCheckBox.Name = "TaskKBDIgnoreAbsentCheckBox";
-            this.TaskKBDIgnoreAbsentCheckBox.Size = new System.Drawing.Size(228, 21);
+            this.TaskKBDIgnoreAbsentCheckBox.Size = new System.Drawing.Size(157, 21);
             this.TaskKBDIgnoreAbsentCheckBox.TabIndex = 5;
-            this.TaskKBDIgnoreAbsentCheckBox.Text = "Ignore if program is not running";
+            this.TaskKBDIgnoreAbsentCheckBox.Text = "Ignore if not running";
             this.TaskKBDIgnoreAbsentCheckBox.UseVisualStyleBackColor = true;
             this.TaskKBDIgnoreAbsentCheckBox.CheckedChanged += new System.EventHandler(this.TaskKBDIgnoreAbsentCheckBox_CheckedChanged);
             // 
@@ -579,12 +590,12 @@ namespace T7EPreferences
             this.TaskKBDNewCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.TaskKBDNewCheckBox.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.TaskKBDNewCheckBox.Location = new System.Drawing.Point(10, 4);
+            this.TaskKBDNewCheckBox.Location = new System.Drawing.Point(153, 5);
             this.TaskKBDNewCheckBox.Margin = new System.Windows.Forms.Padding(2);
             this.TaskKBDNewCheckBox.Name = "TaskKBDNewCheckBox";
-            this.TaskKBDNewCheckBox.Size = new System.Drawing.Size(285, 21);
+            this.TaskKBDNewCheckBox.Size = new System.Drawing.Size(144, 21);
             this.TaskKBDNewCheckBox.TabIndex = 0;
-            this.TaskKBDNewCheckBox.Text = "Open new window if program is running";
+            this.TaskKBDNewCheckBox.Text = "Open new window";
             this.TaskKBDNewCheckBox.TextAlign = System.Drawing.ContentAlignment.TopLeft;
             this.TaskKBDNewCheckBox.UseVisualStyleBackColor = true;
             this.TaskKBDNewCheckBox.CheckedChanged += new System.EventHandler(this.TaskKBDNewCheckBox_CheckedChanged);
@@ -1316,13 +1327,27 @@ namespace T7EPreferences
             this.TabControl.SelectedIndexChanged += new System.EventHandler(this.TabControl_SelectedIndexChanged);
             this.TabControl.SizeChanged += new System.EventHandler(this.TabControl_SizeChanged);
             // 
-            // disableDonationBalloonToolStripMenuItem
+            // TaskKBDSendInBackgroundCheckBox
             // 
-            this.disableDonationBalloonToolStripMenuItem.CheckOnClick = true;
-            this.disableDonationBalloonToolStripMenuItem.Name = "disableDonationBalloonToolStripMenuItem";
-            this.disableDonationBalloonToolStripMenuItem.Size = new System.Drawing.Size(264, 22);
-            this.disableDonationBalloonToolStripMenuItem.Text = "Disable Donation Balloon";
-            this.disableDonationBalloonToolStripMenuItem.Click += new System.EventHandler(this.disableDonationBalloonToolStripMenuItem_Click);
+            this.TaskKBDSendInBackgroundCheckBox.AutoSize = true;
+            this.TaskKBDSendInBackgroundCheckBox.Location = new System.Drawing.Point(333, 30);
+            this.TaskKBDSendInBackgroundCheckBox.Name = "TaskKBDSendInBackgroundCheckBox";
+            this.TaskKBDSendInBackgroundCheckBox.Size = new System.Drawing.Size(157, 21);
+            this.TaskKBDSendInBackgroundCheckBox.TabIndex = 7;
+            this.TaskKBDSendInBackgroundCheckBox.Text = "Send in background";
+            this.TaskKBDSendInBackgroundCheckBox.UseVisualStyleBackColor = true;
+            this.TaskKBDSendInBackgroundCheckBox.CheckedChanged += new System.EventHandler(this.TaskKBDSendInBackground_CheckedChanged);
+            // 
+            // TaskKBDMinimizeAfterwardCheckBox
+            // 
+            this.TaskKBDMinimizeAfterwardCheckBox.AutoSize = true;
+            this.TaskKBDMinimizeAfterwardCheckBox.Location = new System.Drawing.Point(170, 30);
+            this.TaskKBDMinimizeAfterwardCheckBox.Name = "TaskKBDMinimizeAfterwardCheckBox";
+            this.TaskKBDMinimizeAfterwardCheckBox.Size = new System.Drawing.Size(153, 21);
+            this.TaskKBDMinimizeAfterwardCheckBox.TabIndex = 8;
+            this.TaskKBDMinimizeAfterwardCheckBox.Text = "Minimize/deactivate";
+            this.TaskKBDMinimizeAfterwardCheckBox.UseVisualStyleBackColor = true;
+            this.TaskKBDMinimizeAfterwardCheckBox.CheckedChanged += new System.EventHandler(this.TaskKBDMinimizeAfterwardCheckBox_CheckedChanged);
             // 
             // Primary
             // 
@@ -1476,6 +1501,8 @@ namespace T7EPreferences
         private System.Windows.Forms.ToolStripMenuItem visitTheOfficialWebsiteToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem disableDonationBalloonToolStripMenuItem;
+        private System.Windows.Forms.CheckBox TaskKBDSendInBackgroundCheckBox;
+        private System.Windows.Forms.CheckBox TaskKBDMinimizeAfterwardCheckBox;
     }
 }
 

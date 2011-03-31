@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Jumplist Extender Background Process")]
-[assembly: AssemblyDescription("Assigns custom jumplists to any program on Windows 7.")]
+[assembly: AssemblyDescription("Detects user programs and assigns jump lists to them.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Marco Zafra")]
 [assembly: AssemblyProduct("Jumplist Extender")]
@@ -29,5 +29,5 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("0.3.*")]
-[assembly: AssemblyFileVersion("0.3.0.0")]
+[assembly: AssemblyVersion("0.4.*")]
+[assembly: AssemblyFileVersion("0.4.0.0")]

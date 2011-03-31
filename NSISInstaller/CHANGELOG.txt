@@ -1,5 +1,26 @@
 If you are upgrading or reinstalling, close the Jumplist Extender tray icon first.
 
+===VERSION 0.4===
+Version 0.4 is a '''MINOR BUG FIX''' release.
+
+''FIXED:''
+* Command line tasks and EXE shortcuts were being executed with the wrong working directory.
+* Jump List Packs could not be imported because the "AppData\...\Icons\Imported" folder was missing.
+
+''ADDED:''
+* Keystrokes can now be sent to minimized/background windows without activating them.
+
+''KNOWN ISSUES:''
+* Recent/Frequent lists are not supported (yet).
+* Small icons are not extracted from EXE files; only big ones.
+* More at http://code.google.com/p/jumplist-extender/issues/list
+
+===VERSION 0.3-B===
+Version 0.3-B is a '''MINOR BUG FIX''' release.
+
+''FIXED:''
+* Log files were being made in the desktop by accident.
+
 ===VERSION 0.3===
 Version 0.3 is a '''MAJOR BUG FIX''' release.
 
@@ -7,6 +28,9 @@ Version 0.3 is a '''MAJOR BUG FIX''' release.
 * '''Non-English systems would not apply jump lists to the taskbar.'''
 * Broken update check would display weird code in the menus.
 * Old web links were broken.
+
+''KNOWN ISSUES:''
+* Recent/Frequent lists are not supported (yet).
 
 ===Version 0.2-C===
 Version 0.2-C is a '''MINOR BUG FIX''' release.

@@ -38,6 +38,7 @@
             this.TrayIconContextMenuExit = new System.Windows.Forms.ToolStripMenuItem();
             this.UpdateTimer = new System.Windows.Forms.Timer(this.components);
             this.DonateTimer = new System.Windows.Forms.Timer(this.components);
+            this.donateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TrayIconContextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -54,11 +55,12 @@
             this.TrayIconContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.TrayIconContextMenuOpenSettings,
             this.visitTheOfficialWebsiteToolStripMenuItem,
+            this.donateToolStripMenuItem,
             this.updateToVersion0ToolStripMenuItem,
             this.toolStripSeparator1,
             this.TrayIconContextMenuExit});
             this.TrayIconContextMenuStrip.Name = "TrayIconContextMenuStrip";
-            this.TrayIconContextMenuStrip.Size = new System.Drawing.Size(232, 120);
+            this.TrayIconContextMenuStrip.Size = new System.Drawing.Size(232, 142);
             // 
             // TrayIconContextMenuOpenSettings
             // 
@@ -106,6 +108,13 @@
             this.DonateTimer.Interval = 1800000;
             this.DonateTimer.Tick += new System.EventHandler(this.DonateTimer_Tick);
             // 
+            // donateToolStripMenuItem
+            // 
+            this.donateToolStripMenuItem.Name = "donateToolStripMenuItem";
+            this.donateToolStripMenuItem.Size = new System.Drawing.Size(231, 22);
+            this.donateToolStripMenuItem.Text = "&Donate";
+            this.donateToolStripMenuItem.Click += new System.EventHandler(this.donateToolStripMenuItem_Click);
+            // 
             // Primary
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -133,5 +142,6 @@
         private System.Windows.Forms.ToolStripMenuItem updateToVersion0ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem visitTheOfficialWebsiteToolStripMenuItem;
         private System.Windows.Forms.Timer DonateTimer;
+        private System.Windows.Forms.ToolStripMenuItem donateToolStripMenuItem;
     }
 }

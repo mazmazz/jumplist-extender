@@ -1,11 +1,11 @@
 [Setup]
-OutputBaseFilename=JumplistExtender_v0.3
-VersionInfoVersion=0.3.0
-VersionInfoProductVersion=0.3.0
-AppVerName=Version 0.3
-AppVersion=0.3
+OutputBaseFilename=JumplistExtender_v0.4
+VersionInfoVersion=0.4.0
+VersionInfoProductVersion=0.4.0
+AppVerName=Jumplist Extender v0.4
+AppVersion=0.4
 VersionInfoCompany=Marco Zafra
-VersionInfoDescription=A custom jumplist creator for any program on Windows 7
+VersionInfoDescription=A custom jump list creator for any program on Windows 7
 VersionInfoCopyright=Released under GPLv3
 Compression=lzma/ultra64
 VersionInfoProductName=Jumplist Extender

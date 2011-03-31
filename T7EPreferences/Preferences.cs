@@ -257,6 +257,8 @@ namespace T7EPreferences
                     xmlWriter.WriteAttributeString("type", "T7E_TYPE_KBD");
                     xmlWriter.WriteAttributeString("ignoreAbsent", jumplistItem.TaskKBDIgnoreAbsent.ToString());
                     xmlWriter.WriteAttributeString("ignoreCurrent", jumplistItem.TaskKBDIgnoreCurrent.ToString());
+                    xmlWriter.WriteAttributeString("sendBackground", jumplistItem.TaskKBDSendInBackground.ToString());
+                    xmlWriter.WriteAttributeString("minimizeAfterward", jumplistItem.TaskKBDMinimizeAfterward.ToString());
                     xmlWriter.WriteAttributeString("newWindow", jumplistItem.TaskKBDNew.ToString());
                     xmlWriter.WriteAttributeString("isShortcut", jumplistItem.TaskKBDShortcutMode.ToString());
                     xmlWriter.WriteCData(jumplistItem.TaskKBDString);
@@ -321,6 +323,7 @@ namespace T7EPreferences
             {
                 JumpList newList = JumpList.CreateJumpListForAppId(parent.CurrentAppId);
                 //newList.KnownCategoryToDisplay = JumpListKnownCategoryType.Recent;
+                //newList.KnownCategoryOrdinalPosition = 0;
                 
                 ListBox.ObjectCollection jumplistItems = parent.JumplistListBox.Items;
                 for (int i = 0; i < jumplistItems.Count; i++)
@@ -354,13 +357,34 @@ namespace T7EPreferences
                                     break;
 
                                 case T7EJumplistItem.ItemTypeVar.FileFolder:
+                                    // If file is an EXE, just pass the path over.
+                                    // TODO: Merge "Command line" and "File/Folder shortcut" into one dialog, based on "Command Line"
+
                                     JumpListLink link = new JumpListLink
                                     {
                                         Title = jumplistItem.ItemName,
                                         Path = "C:\\Windows\\explorer.exe",
                                         Arguments = jumplistItem.FilePath
+                                        // working directory here? We don't know what the program is.
+                                        // AHK doesn't detect the default program's working dir, either.
                                     };
-                                    if (jumplistItem.FileRunWithApp) link.Path = parent.CurrentAppPath;
+                                    if (jumplistItem.FileRunWithApp)
+                                    {
+                                        link.Path = parent.CurrentAppPath;
+                                        // we use working dir here because we KNOW the program to use
+                                        link.WorkingDirectory = Path.GetDirectoryName(parent.CurrentAppPath);
+                                    }
+
+                                    
+                                    if (Path.GetExtension(jumplistItem.FilePath).ToLower() == ".exe")
+                                    {
+                                        link.Path = jumplistItem.FilePath;
+                                        link.Arguments = "";
+                                        // we use working dir here because we KNOW the program to use
+                                        link.WorkingDirectory = Path.GetDirectoryName(jumplistItem.FilePath);
+                                    }
+                                    
+
                                     // Format icon
                                     if (jumplistItem.ItemIconToString().Equals("Don't use an icon") != true)
                                     {
@@ -442,9 +466,12 @@ namespace T7EPreferences
                     {
                         task.Path = "cmd.exe";
                         task.Arguments = "/k \"" + jumplistItem.ItemCmdToString().Replace("\"", "\"\"") + "\"";
+                        // I'm not sure if this is right, but for any executable, set workingdir to the exe path.
+                        task.WorkingDirectory = Path.GetDirectoryName(jumplistItem.TaskCMDPath);
                     } else {
                         task.Path = jumplistItem.TaskCMDPath;
                         task.Arguments = jumplistItem.TaskCMDArgs;
+                        task.WorkingDirectory = Path.GetDirectoryName(jumplistItem.TaskCMDPath);
                     }
                     break;
 
@@ -452,6 +479,8 @@ namespace T7EPreferences
                     string ahkFilename = GetAhkScriptFilename(false, jumplistItem, itemIndex);
                     if (File.Exists(ahkFilename)) // It should have already been made.
                     {
+                        // Working directory info for autohotkey? Probably not,
+                        // since some scripts will use the predefined scripts in appdata.
                         task.Path = Common.Path_ProgramFiles + "\\AutoHotKey.exe";
                         task.Arguments = "\"" + ahkFilename + "\"";
                     }
@@ -542,6 +571,10 @@ namespace T7EPreferences
             templateText = templateText.Replace("{KBDStartNewProcess}", Convert.ToInt32(jumplistItem.TaskKBDNew).ToString());
             templateText = templateText.Replace("{KBDIgnoreAbsent}", Convert.ToInt32(jumplistItem.TaskKBDIgnoreAbsent).ToString());
             templateText = templateText.Replace("{KBDIgnoreCurrent}", Convert.ToInt32(jumplistItem.TaskKBDIgnoreCurrent).ToString());
+            if(jumplistItem.TaskKBDMinimizeAfterward)
+                templateText = templateText.Replace("{KBDSendBackground}", 2.ToString());
+            else
+                templateText = templateText.Replace("{KBDSendBackground}", Convert.ToInt32(jumplistItem.TaskKBDSendInBackground).ToString());
             
             TextWriter scriptWriter = new StreamWriter(fileName);
             scriptWriter.Write(templateText);

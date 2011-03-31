@@ -154,6 +154,10 @@ namespace T7EPreferences
             //but that's because the operation sets our appid to something different.
             Common.ReadTemplates();
 
+            bool donateBalloonShown = false;
+            bool.TryParse(Common.ReadPref("DonateBalloonShown"), out donateBalloonShown);
+            if (!donateBalloonShown) disableDonationBalloonToolStripMenuItem.Visible = false;
+
             TaskKBDKeyboardTextBox.SetParent(this);
 
             ReadAppList();
@@ -803,6 +807,8 @@ namespace T7EPreferences
                                         jumplistItem.TaskAction = T7EJumplistItem.ActionType.Keyboard;
                                         bool.TryParse(reader["ignoreAbsent"], out jumplistItem.TaskKBDIgnoreAbsent);
                                         bool.TryParse(reader["ignoreCurrent"], out jumplistItem.TaskKBDIgnoreCurrent);
+                                        bool.TryParse(reader["sendBackground"], out jumplistItem.TaskKBDSendInBackground);
+                                        bool.TryParse(reader["minimizeAfterward"], out jumplistItem.TaskKBDMinimizeAfterward);
                                         bool.TryParse(reader["newWindow"], out jumplistItem.TaskKBDNew);
                                         bool.TryParse(reader["isShortcut"], out jumplistItem.TaskKBDShortcutMode);
                                         reader.Read(); // Read to text node
@@ -959,6 +965,8 @@ namespace T7EPreferences
             // Fires off display of task panel
             TaskKBDIgnoreAbsentCheckBox.Checked = _CurrentJumplistItem.TaskKBDIgnoreAbsent;
             TaskKBDIgnoreCurrentCheckBox.Checked = _CurrentJumplistItem.TaskKBDIgnoreCurrent;
+            TaskKBDSendInBackgroundCheckBox.Checked = _CurrentJumplistItem.TaskKBDSendInBackground;
+            TaskKBDMinimizeAfterwardCheckBox.Checked = _CurrentJumplistItem.TaskKBDMinimizeAfterward;
             TaskKBDNewCheckBox.Checked = _CurrentJumplistItem.TaskKBDNew;
             if (_CurrentJumplistItem.TaskKBDShortcutMode)
                 TaskKBDSwitchToShortcutMode();
@@ -1870,6 +1878,7 @@ namespace T7EPreferences
 
         private void FileTextBox_Leave(object sender, EventArgs e)
         {
+            // if FileTextBox.Text is an EXE, ???
             CurrentJumplistItem.FilePath = FileTextBox.Text;
         }
 
@@ -2835,10 +2844,7 @@ Ctrl+P -- Export a Jumplist Pack");
 
         private void donateToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ShowDonateDialog(true);
-            //Process.Start("explorer.exe", "\""+Common.WebPath_DonateSite+"\"");
-            //this.WindowState = FormWindowState.Minimized;
-            //ShowDonateDialog(true);
+            ShowDonateDialog(true); 
         }
 
         private void TaskKBDSwitchAHKButton_Click(object sender, EventArgs e)
@@ -2897,6 +2903,16 @@ Ctrl+P -- Export a Jumplist Pack");
         private void disableDonationBalloonToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ShowDonateDialog(true);
+        }
+
+        private void TaskKBDSendInBackground_CheckedChanged(object sender, EventArgs e)
+        {
+            _CurrentJumplistItem.TaskKBDSendInBackground = TaskKBDSendInBackgroundCheckBox.Checked;
+        }
+
+        private void TaskKBDMinimizeAfterwardCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            _CurrentJumplistItem.TaskKBDMinimizeAfterward = TaskKBDMinimizeAfterwardCheckBox.Checked;
         }
     }
 }

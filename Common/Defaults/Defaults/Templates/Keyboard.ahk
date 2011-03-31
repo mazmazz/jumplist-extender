@@ -15,6 +15,7 @@ JLE_AppWindowClassName := "{AppWindowClassName}"
 JLE_StartNewProcess := {KBDStartNewProcess}
 JLE_KBDIgnoreAbsent := {KBDIgnoreAbsent}
 JLE_KBDIgnoreCurrent := {KBDIgnoreCurrent}
+JLE_KBDSendBackground := {KBDSendBackground}
 
 ; Keystroke is below, on JLE_SendKeystrokeToWindow()
 
@@ -31,4 +32,4 @@ if(RecentWindow <= 0)
   exit
 
 ; Send keystroke!
-JLE_SendKeystrokeToWindow(RecentWindow, "{Keystroke}")
+JLE_SendKeystrokeToWindow(RecentWindow, "{Keystroke}", JLE_KBDSendBackground)

@@ -109,6 +109,13 @@ namespace T7EPreferences
         public bool TaskKBDIgnoreAbsent = false;
         public bool TaskKBDIgnoreCurrent = false;
         public bool TaskKBDNew = false;
+        // These two are saved and pulled up in the UI just like the rest
+        // but they're codified in the AHK template differently:
+        // if TaskKBDSendInBackground, then SendBackground = 1
+        // if TaskKBDMinimizeAfterward, then SendBackground = 2
+        // whether or not SIB is enabled.
+        public bool TaskKBDSendInBackground = false;
+        public bool TaskKBDMinimizeAfterward = false;
         #endregion
 
         #region P/Invokes
@@ -458,13 +465,13 @@ namespace T7EPreferences
         {
             string itemIconPath = "";
             int itemIconIndex = 0;
-            if (iconString.Equals("Use program icon", StringComparison.CurrentCultureIgnoreCase))
+            if (iconString.Equals("Use program icon", StringComparison.OrdinalIgnoreCase))
             {
                 // Bitmap-ize
                 itemIconPath = PrimaryParent.CurrentAppPath;
                 itemIconIndex = 0;
             }
-            else if (iconString.Equals("Don't use an icon", StringComparison.CurrentCultureIgnoreCase)
+            else if (iconString.Equals("Don't use an icon", StringComparison.OrdinalIgnoreCase)
                 || iconString.Trim().Length <= 0)
             {
                 // Blank bitmap-ize

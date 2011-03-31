@@ -8,6 +8,7 @@
 
 #NoTrayIcon
 SetTitleMatchMode, 2
+DetectHiddenWindows, On
 DllCall("Wow64DisableWow64FsRedirection", "uint*", OldValue) ; Disables WOW64 redirection on x64. No more needing Sysnative! IT'S ALL SYSTEM32!
 
 
@@ -100,7 +101,7 @@ JLE_GetMostRecentWindow(processName, processWindowName = "", processWindowClass 
         WinGet, windowList, List, %processWindowName%
     }
     
-    Loop { ; Loop through each entry of windowList
+    Loop, %windowList% { ; Loop through each entry of windowList
         if windowList%A_Index% <= 0 ; Does array entry not exist?
             break
         
@@ -127,22 +128,72 @@ JLE_GetMostRecentWindow(processName, processWindowName = "", processWindowClass 
 ; Activates window, and then sends keystrokes to it
 ; Note: Window must be activated to receive keystrokes.
 ; Params: windowHandle -- Window to receive keystrokes
-;                 keystroke -- Keystrokes in "Send" format, e.g. ^o ==> Ctrl+O; ^!{Del} ==> Ctrl+Alt+Del
+;         keystroke -- Keystrokes in "Send" format, e.g. ^o ==> Ctrl+O; ^!{Del} ==> Ctrl+Alt+Del
+;         background -- 
 ; Returns: 1 -- Keystroke successfully sent to window
 ;                    0 -- Window could not be activated
-JLE_SendKeystrokeToWindow(windowHandle, keystroke)
+JLE_SendKeystrokeToWindow(windowHandle, keystroke, background = 0)
 {
-    ; Activate most recent window
-    WinActivate, ahk_id %windowHandle%
+    ; if background = 0 or 2, then activate the normal way
+    ; if background = 2, minimize afterward. a "psuedo-background" keystroke, if you will
+    if(background != 1) {
+        if(background = 2) {
+            ; Get the hwnd of the currently active window, for background=2.
+            DetectHiddenWindows, Off
+            WinGet, windowList, List
+            DetectHiddenWindows, On
 
-    ; Wait for most recent window to become active. Send keystroke.
-    ; After 5 seconds, stop trying.
-    WinWaitActive, ahk_id %windowHandle%, , 5
-    if(ErrorLevel) {
-        return 0
+            ; Get windowHandle of array entry. Check its process name for a match
+            Loop, %windowList% {
+                if(A_Index < 3) {
+                    continue ; I'm positive that the winList goes Start, Taskbar, Last Active Window.
+                }
+                currentWindowHandle := windowList%A_Index%
+            
+                WinGet, currentWindowMinimized, MinMax, ahk_id %currentWindowHandle%
+                ;WinGetTitle, currentWindowTitle, ahk_id %currentWindowHandle% ;debug
+                ;WinGet, currentWindowProcessName, ProcessName, ahk_id %currentWindowHandle% ;debug, might be useful
+                ;Msgbox, %currentWindowMinimized%|%currentWindowTitle%|%currentWindowProcessName%
+
+                if(currentWindowMinimized > -1) {
+                    break
+                }
+            }
+
+            currentActiveHwnd := currentWindowHandle
+        }
+
+        ; Also get the minimized state of the program window
+        WinGet, windowMinimized, MinMax, ahk_id %windowHandle%
+
+        ; Activate most recent window
+        WinActivate, ahk_id %windowHandle%
+
+        ; Wait for most recent window to become active. Send keystroke.
+        ; After 5 seconds, stop trying.
+        WinWaitActive, ahk_id %windowHandle%, , 5
+        if(ErrorLevel) {
+            return 0
+        } else {
+            Send %keystroke%
+
+            if(background = 2) {
+                if(windowMinimized = -1) {
+                    WinMinimize, ahk_id %windowHandle%
+                } else if(currentActiveHwnd != windowHandle) {
+                    WinActivate, ahk_id %currentActiveHwnd%
+                }
+            }
+            return 1
+        }
     } else {
-        Send %keystroke%
-        return 1
+        ; Use ControlSend to send keystroke in background. Hit-and-miss: does not work with all programs.
+        ControlSend, , %keystroke%, ahk_id %windowHandle%
+        if(ErrorLevel) {
+            return 0
+        } else {
+            return 1
+        }
     }
     
     return 0
