@@ -858,12 +858,14 @@ namespace T7EPreferences
                                     case "T7E_TYPE_CMD":
                                         jumplistItem.TaskAction = T7EJumplistItem.ActionType.CommandLine;
                                         bool.TryParse(reader["showWindow"], out jumplistItem.TaskCMDShowWindow);
+                                        string workdirString = reader["workingDir"] ?? string.Empty;
                                         reader.Read(); // Read to text node
                                         string cmdString = "";
                                         if (PackLoading) cmdString = Preferences.ReplaceVarsToPaths(reader.Value);
                                         else cmdString = Common.ReplaceEnvVarToExpandedPath(reader.Value);
 
                                         jumplistItem.StringToItemCmd(cmdString);
+                                        jumplistItem.StringToItemWorkDir(workdirString);
                                         break;
 
                                     case "T7E_TYPE_AHK":
@@ -1014,6 +1016,7 @@ namespace T7EPreferences
                 TaskKBDSwitchToTextMode();
             //
             TaskCMDTextBox.Text = _CurrentJumplistItem.ItemCmdToString();
+            TaskCMDWorkdirTextBox.Text = _CurrentJumplistItem.ItemWorkDirToString();
             TaskCMDShowWindowCheckbox.Checked = _CurrentJumplistItem.TaskCMDShowWindow;
             //
             TaskAHKTextBox.Text = _CurrentJumplistItem.TaskAHKScript;
@@ -1936,6 +1939,11 @@ namespace T7EPreferences
         private void TaskCMDTextBox_Leave(object sender, EventArgs e)
         {
             CurrentJumplistItem.StringToItemCmd(TaskCMDTextBox.Text);
+        }
+
+        private void TaskCMDWorkDirTextBox_Leave(object sender, EventArgs e)
+        {
+            CurrentJumplistItem.StringToItemWorkDir(TaskCMDWorkdirTextBox.Text);
         }
 
         private void TaskCMDShowWindowCheckbox_CheckedChanged(object sender, EventArgs e)

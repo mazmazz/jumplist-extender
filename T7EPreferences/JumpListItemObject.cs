@@ -102,6 +102,7 @@ namespace T7EPreferences
                                      // UI shows TaskAHKTextBox, and this is empty.
         public string TaskCMDPath = "";
         public string TaskCMDArgs = "";
+        public string TaskCMDWorkDir = "";
         public bool TaskCMDShowWindow = false;
 
         public bool TaskKBDShortcutMode = true;
@@ -347,6 +348,11 @@ namespace T7EPreferences
             TaskKBDString = taskKBDString;
         }
 
+        public void StringToItemWorkDir(string cmdWorkDir)
+        {
+            TaskCMDWorkDir = cmdWorkDir;
+        }
+
         public void StringToItemCmd(string cmdString)
         {
             string cmdLine = cmdString.Trim();
@@ -426,6 +432,11 @@ namespace T7EPreferences
                     "\"" + cmdArg1 + "\" " + cmdArgRest
                     : cmdArg1 + " " + cmdArgRest;
             }
+        }
+
+        public string ItemWorkDirToString()
+        {
+            return TaskCMDWorkDir;
         }
 
         public string ItemCmdToString()

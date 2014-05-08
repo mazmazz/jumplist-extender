@@ -267,6 +267,7 @@ namespace T7EPreferences
                 case T7EJumplistItem.ActionType.CommandLine:
                     xmlWriter.WriteAttributeString("type", "T7E_TYPE_CMD");
                     xmlWriter.WriteAttributeString("showWindow", jumplistItem.TaskCMDShowWindow.ToString());
+                    xmlWriter.WriteAttributeString("workingDir", jumplistItem.ItemWorkDirToString());
                     if(isPack)
                         xmlWriter.WriteValue(ReplacePathsToVars(jumplistItem.ItemCmdToString()));
                     else
@@ -492,13 +493,14 @@ namespace T7EPreferences
                     {
                         task.Path = "cmd.exe";
                         task.Arguments = "/k \"" + jumplistItem.ItemCmdToString().Replace("\"", "\"\"") + "\"";
-                        // I'm not sure if this is right, but for any executable, set workingdir to the exe path.
-                        task.WorkingDirectory = Path.GetDirectoryName(jumplistItem.TaskCMDPath);
                     } else {
                         task.Path = jumplistItem.TaskCMDPath;
                         task.Arguments = jumplistItem.TaskCMDArgs;
-                        task.WorkingDirectory = Path.GetDirectoryName(jumplistItem.TaskCMDPath);
                     }
+                    if (string.IsNullOrEmpty(jumplistItem.TaskCMDWorkDir))
+                        task.WorkingDirectory = Path.GetDirectoryName(jumplistItem.TaskCMDPath);
+                    else
+                        task.WorkingDirectory = jumplistItem.TaskCMDWorkDir;
                     break;
 
                 case T7EJumplistItem.ActionType.AutoHotKey:
