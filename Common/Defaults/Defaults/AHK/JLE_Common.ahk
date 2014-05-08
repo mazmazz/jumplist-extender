@@ -23,7 +23,7 @@ DllCall("Wow64DisableWow64FsRedirection", "uint*", OldValue) ; Disables WOW64 re
 ;         waitSeconds -- -1 for "Default 5 seconds;" 0 for "Instantaneous;" greater than 0 for # of seconds to wait for process
 ; Returns: 1 -- Process and window exists
 ;          0 -- Process and window do not exist
-JLE_CheckProcessWindowExists(processName, processPath, processWindowName = "", processWindowClass = "", startNewProcess = 0, waitSeconds = -1, ignoreAbsent = 0, ignoreCurrent = 0) 
+JLE_CheckProcessWindowExists(processName, processPath, processWindowName = "", processWindowClass = "", startNewProcess = 0, waitSeconds = -1, ignoreAbsent = 0, ignoreCurrent = 0)
 {
     if (waitSeconds < 0) {
         waitSeconds = 5
@@ -31,13 +31,13 @@ JLE_CheckProcessWindowExists(processName, processPath, processWindowName = "", p
 
     ; Check if the process is running
     Process, Exist, %processName%
-    
+
     ; Error level will have the "process exist result."
     ; If 0, it's not running. OR, if startNewProcess is specified, start it anyways.
     ; If startNewProcess is -1, don't run a new process.
     If (ignoreAbsent < 1 && ErrorLevel <= 0 || startNewProcess >= 1 && startNewProcess > -1) {
         ; Check for UAC
-        VarSetCapacity(sui,68, 0)
+        VarSetCapacity(si, 68, 0)
         VarSetCapacity(pi, 16, 0)
         result := DllCall("CreateProcess", "uint", 0, "uint", &processPath, "uint", 0, "uint", 0, "int", true, "uint", 0, "uint", 0, "uint", 0, "uint", &si, "uint", &pi)
         resultCode:=DllCall("GetLastError")
@@ -69,7 +69,7 @@ JLE_CheckProcessWindowExists(processName, processPath, processWindowName = "", p
             }
         }
     }
-    
+
     if(processWindowName != "") {
         WinWait, %processWindowName%, , %waitSeconds%
         if (ErrorLevel) {
@@ -82,7 +82,7 @@ JLE_CheckProcessWindowExists(processName, processPath, processWindowName = "", p
             }
         }
     }
-    
+
     return 0
 }
 
@@ -100,11 +100,11 @@ JLE_GetMostRecentWindow(processName, processWindowName = "", processWindowClass 
     } else if (processWindowName != "") {
         WinGet, windowList, List, %processWindowName%
     }
-    
+
     Loop, %windowList% { ; Loop through each entry of windowList
         if windowList%A_Index% <= 0 ; Does array entry not exist?
             break
-        
+
         ; Get windowHandle of array entry. Check its process name for a match
         windowHandle := windowList%A_Index%
 
@@ -120,7 +120,7 @@ JLE_GetMostRecentWindow(processName, processWindowName = "", processWindowClass 
             return %windowHandle% ; Got a match!
         }
     }
-    
+
     return 0
 }
 
@@ -129,7 +129,7 @@ JLE_GetMostRecentWindow(processName, processWindowName = "", processWindowClass 
 ; Note: Window must be activated to receive keystrokes.
 ; Params: windowHandle -- Window to receive keystrokes
 ;         keystroke -- Keystrokes in "Send" format, e.g. ^o ==> Ctrl+O; ^!{Del} ==> Ctrl+Alt+Del
-;         background -- 
+;         background --
 ; Returns: 1 -- Keystroke successfully sent to window
 ;                    0 -- Window could not be activated
 JLE_SendKeystrokeToWindow(windowHandle, keystroke, background = 0)
@@ -149,7 +149,7 @@ JLE_SendKeystrokeToWindow(windowHandle, keystroke, background = 0)
                     continue ; I'm positive that the winList goes Start, Taskbar, Last Active Window.
                 }
                 currentWindowHandle := windowList%A_Index%
-            
+
                 WinGet, currentWindowMinimized, MinMax, ahk_id %currentWindowHandle%
                 ;WinGetTitle, currentWindowTitle, ahk_id %currentWindowHandle% ;debug
                 ;WinGet, currentWindowProcessName, ProcessName, ahk_id %currentWindowHandle% ;debug, might be useful
@@ -195,7 +195,7 @@ JLE_SendKeystrokeToWindow(windowHandle, keystroke, background = 0)
             return 1
         }
     }
-    
+
     return 0
 }
 
@@ -219,20 +219,20 @@ ret:=DllCall("Advapi32.dll\OpenProcessToken", "UInt", windowProcessHandle, "UInt
 
 ; GetTokenInformation 1, for size
 DllCall("Advapi32.dll\GetTokenInformation"
-   , "UInt", hToken               
+   , "UInt", hToken
    , "UInt", TokenInformationClass
-   , "Int", 0                     
-   , "Int", 0                     
-   , "UIntP", ReturnLength)       
+   , "Int", 0
+   , "Int", 0
+   , "UIntP", ReturnLength)
 
 sizeof_elevationType:=VarSetCapacity(elevationType, ReturnLength, 0)
 ; Get token information 2, for elevation
 DllCall("Advapi32.dll\GetTokenInformation"
-   , "UInt", hToken               
+   , "UInt", hToken
    , "UInt", TokenInformationClass
-   , "UIntP", elevationType       
-   , "Int", sizeof_elevationType  
-   , "UIntP", ReturnLength)       
+   , "UIntP", elevationType
+   , "Int", sizeof_elevationType
+   , "UIntP", ReturnLength)
 
 ; Detect elevation type
 result := 0
