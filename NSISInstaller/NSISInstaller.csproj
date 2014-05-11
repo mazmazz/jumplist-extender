@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+﻿﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -102,10 +102,11 @@
   <PropertyGroup>
     <PostBuildEvent>rmdir /s /q "$(ProjectDir)Files"
 if "$(ConfigurationName)"=="Release" xcopy "$(SolutionDir)bin\Release\*" "$(ProjectDir)Files" /e /y /i /exclude:$(ProjectDir)NSISInstaller_Build_Exclude.txt
+if "$(ConfigurationName)"=="Release" xcopy "$(SolutionDir)Libraries\AutoHotkey.exe" "$(ProjectDir)Files" /e /y /i
 echo Install Marker -- Delete to make JLE portable, but be careful NOT to do this to your installation! (i.e. make sure JLE can write to this directory without admin privileges.) &gt; "$(ProjectDir)Files\INSTALLED"
 if "$(ConfigurationName)"=="Release" "%25programfiles(x86)%25\Inno Setup 5\ISCC.exe" "$(ProjectDir)MainInstall.iss"</PostBuildEvent>
   </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
