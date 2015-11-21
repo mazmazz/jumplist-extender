@@ -5,6 +5,8 @@ using System.Text;
 using System.IO;
 using System.Diagnostics;
 using System.Reflection;
+using Microsoft.Win32;
+using System.Globalization;
 
 namespace T7ECommon
 {
@@ -53,7 +55,27 @@ namespace T7ECommon
         {
             System.OperatingSystem osInfo = System.Environment.OSVersion;
             if (osInfo.Version.Major < 6 || (osInfo.Version.Major == 6 && osInfo.Version.Minor < 1))
-                Fail("Jumplist Extender cannot run on systems prior to Windows 7.", 1);
+                Fail("Jumplist Extender needs to be run on Windows 7 or later.", 1);
+
+            // check net version, too. System.Core 3.5.0.0
+            CheckNetVersion();
+        }
+
+        public static void CheckNetVersion()
+        {
+            if (Environment.Version.Major >= 4) return; // hopefully this does not fail in .NET 5+.
+            else
+            {
+                // is .NET 3.5 installed?
+                RegistryKey installed_versions = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP");
+                string[] version_names = installed_versions.GetSubKeyNames();
+                //version names start with 'v', eg, 'v3.5' which needs to be trimmed off before conversion
+                double Framework = Convert.ToDouble(version_names[version_names.Length - 1].Remove(0, 1), CultureInfo.InvariantCulture);
+                int SP = Convert.ToInt32(installed_versions.OpenSubKey(version_names[version_names.Length - 1]).GetValue("SP", 0));
+
+                if (Framework < 3.5)
+                    Fail("Jumplist Extender needs .NET 3.5 or higher to be installed.", 1);
+            }
         }
 
         public static void CheckFiles()
@@ -91,6 +113,10 @@ namespace T7ECommon
             string appDataOrigPropertiesDir = Path.Combine(appDataDir, "OrigProperties");
             if (!Directory.Exists(appDataOrigPropertiesDir))
                 Directory.CreateDirectory(appDataOrigPropertiesDir);
+
+            string appDataTempShortcutsDir = Path.Combine(appDataDir, "TempShortcuts");
+            if (!Directory.Exists(appDataTempShortcutsDir))
+                Directory.CreateDirectory(appDataTempShortcutsDir);
 
             // bug 68: fixes jump list imports when appDataDir\Icons\Imported does not exist
             string appDataIconsDir = Path.Combine(appDataDir, "Icons");

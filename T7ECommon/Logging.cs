@@ -14,8 +14,8 @@ namespace T7ECommon
     {
         static string MailUserName = "jumplist.extender@gmail.com";
         static string MailPassword = ""; //This must be filled in
-        static string MailRecipient = "digimarco35@yahoo.com";
-        static string MailVersion = "v0.4";
+        static string MailRecipient = "lapletapps+jlebugs@gmail.com";
+        static string MailVersion = "v0.4-B";
 
         static public void SendExceptionLog(Exception e)
         {
@@ -35,8 +35,8 @@ namespace T7ECommon
         static public void SendExceptionLog(Exception e, string appName, string appPath, string appWindowClassName, string appId)
         {
             DialogResult errSendResult = MessageBox.Show(
-                    "Sorry -- Jumplist Extender reached a critical error, and has to close immediately." + Environment.NewLine
-                    + "Could you send the below error report with just one click? It helps the developer GREATLY! Thanks!" + Environment.NewLine + Environment.NewLine
+                    "Jumplist Extender reached a critical error and needs to close." + Environment.NewLine
+                    + "Send the below error report directly to the developer, with one click?" + Environment.NewLine + Environment.NewLine
                     + e.Message.ToString(),
                     "Critical Error",
                     MessageBoxButtons.YesNo,
@@ -44,7 +44,7 @@ namespace T7ECommon
                     MessageBoxDefaultButton.Button1);
 
             if (errSendResult != DialogResult.Yes) return;
-            else { MessageBox.Show("Thanks! An error report will be sent.",
+            else { MessageBox.Show("Thanks! An error report will now be sent.",
                 "Sending Mail",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Asterisk); }
@@ -81,13 +81,13 @@ namespace T7ECommon
             catch (Exception ee)
             {
                 MessageBox.Show("Email could not be sent: " + ee.Message + Environment.NewLine
-                    + "Sorry, but thanks for your consideration! Click \"OK\" to exit.",
+                    + "Click \"OK\" to exit.",
                     "Email Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             }
 
-            MessageBox.Show("Email sent! Thanks for your consideration! If this bug happens repeatedly, please file a bug report at\r\n\r\nhttp://code.google.com/p/jumplist-extender/issues/list\r\n\r\nor email me at digimarco35@yahoo.com."
+            MessageBox.Show("Email sent. If this crash happens repeatedly, please email the developer with additional information at lapletapps@gmail.com."
                 + "\r\n\r\nClick \"OK\" to exit.",
                 "Email Sent",
                 MessageBoxButtons.OK,

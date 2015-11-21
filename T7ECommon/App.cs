@@ -231,7 +231,13 @@ namespace T7ECommon
             appIdHash.ComputeHash(new ASCIIEncoding().GetBytes(appIdHashSource));
 
             // Build final appId
-            string appId = "JLE." + String.Format("{0:X}", appIdHash.CrcValue) + "_" + Path.GetFileNameWithoutExtension(programFilePath).ToLower();
+            string appId;
+            try {
+                appId = "JLE." + String.Format("{0:X}", appIdHash.CrcValue) + "_" + Path.GetFileNameWithoutExtension(programFilePath).ToLower();
+            } catch(Exception e)
+            {
+                appId = "";
+            }
 
             if (appId.Length > 1)
                 return appId;

@@ -26,11 +26,12 @@ namespace T7EPreferences
 
             // donatedialogdisable handled in show event
 
-            bool donateBalloonDisable = false;
-            bool.TryParse(Common.ReadPref("DonateBalloonDisable"), out donateBalloonDisable);
+            // dummying out donate dialog
+            bool donateBalloonDisable = true;// false;
+            //bool.TryParse(Common.ReadPref("DonateBalloonDisable"), out donateBalloonDisable);
 
-            bool donateBalloonShown = false;
-            bool.TryParse(Common.ReadPref("DonateBalloonShown"), out donateBalloonShown);
+            bool donateBalloonShown = true;// false;
+            //bool.TryParse(Common.ReadPref("DonateBalloonShown"), out donateBalloonShown);
             checkBox2.Enabled = checkBox2.Visible = donateBalloonShown;
             checkBox2.Checked = donateBalloonDisable;
 

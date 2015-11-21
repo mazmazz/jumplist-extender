@@ -1,5 +1,19 @@
 If you are upgrading or reinstalling, close the Jumplist Extender tray icon first.
 
+===VERSION 0.4-B===
+Version 0.4-B is a '''MINOR BUG FIX''' release.
+
+''FIXED:''
+* Assorted crashes.
+
+''ADDED:''
+* Donation messages and update checks are removed.
+
+''KNOWN ISSUES:''
+* Under Windows 10 RTM, jump lists will not appear for unpinned apps until they are pinned to the taskbar. Windows 10 RTM requires that apps be pinned to the taskbar before the jump list will work. 
+
+This limitation was removed in the Windows 10 November 2015 Update and jump lists will appear for unpinned apps starting with that update.
+
 ===VERSION 0.4===
 Version 0.4 is a '''MINOR BUG FIX''' release.
 

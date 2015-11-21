@@ -34,8 +34,8 @@ namespace T7ECommon
         #endregion
 
         #region Window Hooks, Creation, and Enumeration
-        int PROCESS_QUERY_INFORMATION = 0x0400;
-        int PROCESS_VM_READ = 0x0010;
+        public const int PROCESS_QUERY_INFORMATION = 0x0400;
+        public const int PROCESS_VM_READ = 0x0010;
 
         [DllImport("user32")]
         public static extern uint
@@ -96,6 +96,9 @@ namespace T7ECommon
 
         [DllImport("kernel32.dll", ExactSpelling = true, EntryPoint = "QueryFullProcessImageNameW", CharSet = CharSet.Unicode)]
         public static extern bool QueryFullProcessImageName(IntPtr hProcess, uint dwFlags, StringBuilder lpExeName, ref uint lpdwSize);
+
+        [DllImport("shlwapi.dll")]
+        public static extern bool PathIsNetworkPath(string pszPath);
 
         [Flags()]
         public enum ProcessAccess : int

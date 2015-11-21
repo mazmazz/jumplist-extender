@@ -6,11 +6,16 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.IO;
 using T7ECommon;
+using System.Threading;
+using System.Diagnostics;
 
 namespace T7EBackground
 {
     static class Program
     {
+        static Mutex mutex = new Mutex(true, "{7124FFA4-A77D-415A-A102-B019BA4756F7}");
+        public static bool CleaningUp = false;
+
         static void Main()
         {
             // Do file/directory checks
@@ -23,23 +28,45 @@ namespace T7EBackground
             // Do file/directory checks
             Common.CheckFiles();
 
+            // Check if another process of the same name exists
+
+
             ////////////////////////
 
             // Start running the app. If DEBUG, run without exception logging.
             // If RELEASE, then yes, put it in a try{}catch{} block.
-            Application.EnableVisualStyles();
+            if (mutex.WaitOne(TimeSpan.Zero, true))
+            {
+                try {
+                    Application.EnableVisualStyles();
 
-#if DEBUG
-            Application.Run(new Primary());
-            return;
-#endif
+                    //#if RELEASE
+                    Application.Run(new Primary());
+                    mutex.ReleaseMutex();
+                } catch(Exception e)
+                {
+                    mutex.ReleaseMutex();
 
-            try { Application.Run(new Primary()); }
+                    if (!CleaningUp)
+                    {
+                        Process.Start(Application.ExecutablePath);
+                        Environment.Exit(-1);
+                    }
+                }
+            }
+            else
+            {
+                return;
+            }
+//#endif
+/*
+            try { throw new NotImplementedException(); Application.Run(new Primary()); }
             catch (Exception e)
             {
                 Common.SendExceptionLog(e, "T7EBackground");
                 Environment.Exit(-1);
             }
+            */
         }
 
     }

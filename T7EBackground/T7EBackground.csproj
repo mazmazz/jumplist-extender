@@ -59,8 +59,9 @@
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
     <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
   </PropertyGroup>
+  <PropertyGroup />
   <PropertyGroup>
-    <NoWin32Manifest>true</NoWin32Manifest>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -123,17 +124,19 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
+    <None Include="app.manifest" />
+    <None Include="Resources\PrimaryIcon.ico" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Libraries\WindowsAPICodePack\Shell\WindowsAPICodePack_Shell.csproj">
-      <Project>{AA0C00CB-8699-4F37-BFAE-40CA87ACC06D}</Project>
+      <Project>{aa0c00cb-8699-4f37-bfae-40ca87acc06d}</Project>
       <Name>WindowsAPICodePack_Shell</Name>
     </ProjectReference>
     <ProjectReference Include="..\T7ECommon\T7ECommon.csproj">
-      <Project>{7DF8C0C9-F89C-42BD-99B2-D5DCB13FA0BD}</Project>
+      <Project>{7df8c0c9-f89c-42bd-99b2-d5dcb13fa0bd}</Project>
       <Name>T7ECommon</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\PrimaryIcon.ico" />
   </ItemGroup>
   <PropertyGroup>
     <PostBuildEvent>

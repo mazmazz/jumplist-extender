@@ -88,6 +88,11 @@ namespace T7EBackground
                     CommonLog("Applying AppId");
                     Common.TaskbarManagerInstance.SetApplicationIdForSpecificWindow(hWnd, appId);
 
+                    // Win10 RTM: Pin shortcut here if no shortcut exists
+                    // Doesn't work
+                    //if (Environment.OSVersion.Version.Major == 10 && Environment.OSVersion.Version.Build < 10586)
+                    //    PinTempShortcutFromHwnd(hWnd, appId);
+
                     CommonLog("Done checking window!", -1);
 
                     break; // Since a window belongs to only one appId
@@ -149,6 +154,11 @@ namespace T7EBackground
                         Interop.ShowWindow(hWnd, 0);
                         //Thread.Sleep(250);
                         Interop.ShowWindow(hWnd, 5);
+
+                        // Win10 RTM: Unpin shortcut here
+                        // doesn't work
+                        //if(Environment.OSVersion.Version.Major == 10 && Environment.OSVersion.Version.Build < 10586)
+                        //    UnpinTempShortcut(hWnd, origAppId);
 
                         CommonLog("Finished checking AppId.", -1);
 
@@ -222,6 +232,26 @@ namespace T7EBackground
             }
         }
 
+        public string GetWindowProcessPath(IntPtr hWnd)
+        {
+            // Get process ID from window
+            int hwndPid;
+            Interop.GetWindowThreadProcessId(hWnd, out hwndPid);
+
+            StringBuilder hwndProcessNameString = new StringBuilder(Interop.MAX_PATH);
+            IntPtr processHandle = IntPtr.Zero;
+            try
+            {
+                processHandle = Interop.OpenProcess(Interop.ProcessAccess.QueryInformationLimited, false, hwndPid);
+                uint pathLength = 260;
+                Interop.QueryFullProcessImageName(processHandle, 0, hwndProcessNameString, ref pathLength);
+                Interop.CloseHandle(processHandle);
+
+                return hwndProcessNameString.ToString();
+            }
+            catch (Exception e) { Interop.CloseHandle(processHandle); return ""; }
+        }
+
         /// <summary>
         /// The main procedure for assigning AppId to window. Takes one hWnd and checks it against changesList
         /// </summary>
@@ -268,16 +298,39 @@ namespace T7EBackground
         /// <param name="m"></param>
         protected override void WndProc(ref Message m)
         {
-            if (m.Msg == WM_ShellHook && (int)m.WParam == 1) // HSHELL_WINDOWCREATED
+            if (m.Msg == WM_ShellHook)
             {
-                CommonLog("Detected new window.", 1);
+                if ((int)m.WParam == 1) // HSHELL_WINDOWCREATED
+                {
+                    CommonLog("Detected new window.", 1);
 
-                // Do I want this to be multithreaded? Possible limitation: AssignAppIdsToWindows
-                // creates a new AppWindow. Can I cancel the AssignAppIdsToWindows thread???
-                //Thread matchWindowThread = new Thread(new ParameterizedThreadStart(AssignAppIdsToWindows));
-                AssignAppIdsToWindows(m.LParam);
+                    // Do I want this to be multithreaded? Possible limitation: AssignAppIdsToWindows
+                    // creates a new AppWindow. Can I cancel the AssignAppIdsToWindows thread???
+                    //Thread matchWindowThread = new Thread(new ParameterizedThreadStart(AssignAppIdsToWindows));
+                    if (System.Environment.OSVersion.Version.Major == 10 && Environment.OSVersion.Version.Minor < 10586)
+                    {
+                        //if (IsAppPinnedByProcessName(Path.GetFileNameWithoutExtension(GetWindowProcessPath(m.LParam))))
+                            AssignAppIdsToWindows(m.LParam);
+                    }
+                    else
+                    {
+                        AssignAppIdsToWindows(m.LParam);
+                    }
 
-                CommonLog("Finished handling created window.", 0);
+                    // Win10 RTM: If window does not have a pinned shortcut, then pin it. Monitor for window closing then delete the shortcut
+                    // The temp pinning is a workaround as jump lists do not work for unpinned shortcuts (the list is displayed, but actions don't do anything.
+                    // This workaround is unnecessary in TH2 (build 10586) as the OS bug is fixed.
+
+                    CommonLog("Finished handling created window.", 0);
+                }
+                else if((int)m.WParam == 2) // HSHELL_WINDOWDESTROYED
+                {
+                    // Win10 RTM: Unpin shortcut when windows is closed
+                    // doesn't work
+                    //System.OperatingSystem osInfo = System.Environment.OSVersion;
+                    //if (osInfo.Version.Major == 10 && (osInfo.Version.Build < 10586))
+                    //    UnpinTempShortcut(m.LParam, "");
+                }
             }
 
             base.WndProc(ref m);

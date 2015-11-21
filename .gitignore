@@ -2,6 +2,7 @@
 obj/
 bin/
 Backup/
+Extra/
 NSISInstaller/Files/*
 NSISInstaller/Output/*
 *.ncb

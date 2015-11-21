@@ -5,11 +5,14 @@ using System.Windows.Forms;
 using System.IO;
 using T7ECommon;
 using System.Diagnostics;
+using System.Threading;
 
 namespace T7EPreferences
 {
     static class Program
     {
+        static Mutex mutex = new Mutex(true, "{467D53F9-24D0-47BA-83F2-214A6791C451}");
+
         [STAThread]
         static void Main()
         {
@@ -41,26 +44,43 @@ namespace T7EPreferences
                 catch (Exception e) { }
             }
 
-#if DEBUG
-            Application.EnableVisualStyles();
-            Application.Run(new Primary());
-            return;
-#endif
-//IF RELEASE
-            try
+            //#if DEBUG
+            if (mutex.WaitOne(TimeSpan.Zero, true))
             {
                 Application.EnableVisualStyles();
                 Application.Run(new Primary());
-            }
-            catch (Exception e)
+                mutex.ReleaseMutex();
+            } else
             {
-                Common.SendExceptionLog(e, Primary._CurrentAppName, Primary._CurrentAppPath);
-
-                Environment.Exit(-1);
+                Process currentProcess = Process.GetCurrentProcess();
+                var runningProcess = (from process in Process.GetProcesses()
+                                      where
+                                        process.Id != currentProcess.Id &&
+                                        process.ProcessName.Equals(
+                                          currentProcess.ProcessName,
+                                          StringComparison.Ordinal)
+                                      select process).FirstOrDefault();
+                if (runningProcess != null)
+                {
+                    Interop.SetForegroundWindow(runningProcess.MainWindowHandle);
+                }
             }
-//ENDIF
-        }
+                //#endif
+                /*
+                //IF RELEASE
+                            try
+                            {
+                                Application.EnableVisualStyles();
+                                Application.Run(new Primary());
+                            }
+                            catch (Exception e)
+                            {
+                                Common.SendExceptionLog(e, Primary._CurrentAppName, Primary._CurrentAppPath);
 
-        
+                                Environment.Exit(-1);
+                            }
+                //ENDIF
+                */
+        }
     }
 }

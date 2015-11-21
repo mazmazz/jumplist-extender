@@ -53,10 +53,10 @@
             // 
             this.StartLabel.AutoSize = true;
             this.StartLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.StartLabel.Location = new System.Drawing.Point(11, 12);
+            this.StartLabel.Location = new System.Drawing.Point(9, 10);
             this.StartLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.StartLabel.Name = "StartLabel";
-            this.StartLabel.Size = new System.Drawing.Size(270, 20);
+            this.StartLabel.Size = new System.Drawing.Size(230, 17);
             this.StartLabel.TabIndex = 0;
             this.StartLabel.Text = "Welcome to Jumplist Extender.";
             // 
@@ -64,27 +64,27 @@
             // 
             this.ExitButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.ExitButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.ExitButton.Location = new System.Drawing.Point(305, 12);
+            this.ExitButton.Location = new System.Drawing.Point(244, 10);
             this.ExitButton.Margin = new System.Windows.Forms.Padding(2);
             this.ExitButton.Name = "ExitButton";
-            this.ExitButton.Size = new System.Drawing.Size(94, 29);
+            this.ExitButton.Size = new System.Drawing.Size(75, 23);
             this.ExitButton.TabIndex = 1;
             this.ExitButton.Text = "&Close";
             this.ExitButton.UseVisualStyleBackColor = true;
             // 
             // ExitPanel
             // 
-            this.ExitPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.ExitPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.ExitPanel.BackColor = System.Drawing.SystemColors.Control;
             this.ExitPanel.Controls.Add(this.DonatePictureBox);
             this.ExitPanel.Controls.Add(this.linkLabel1);
             this.ExitPanel.Controls.Add(this.ExitButton);
             this.ExitPanel.Controls.Add(this.UpdateLinkLabel);
-            this.ExitPanel.Location = new System.Drawing.Point(0, 292);
+            this.ExitPanel.Location = new System.Drawing.Point(0, 234);
             this.ExitPanel.Margin = new System.Windows.Forms.Padding(2);
             this.ExitPanel.Name = "ExitPanel";
-            this.ExitPanel.Size = new System.Drawing.Size(422, 68);
+            this.ExitPanel.Size = new System.Drawing.Size(338, 54);
             this.ExitPanel.TabIndex = 3;
             // 
             // DonatePictureBox
@@ -92,10 +92,10 @@
             this.DonatePictureBox.Cursor = System.Windows.Forms.Cursors.Hand;
             this.DonatePictureBox.Enabled = false;
             this.DonatePictureBox.Image = ((System.Drawing.Image)(resources.GetObject("DonatePictureBox.Image")));
-            this.DonatePictureBox.Location = new System.Drawing.Point(208, 14);
+            this.DonatePictureBox.Location = new System.Drawing.Point(166, 11);
             this.DonatePictureBox.Margin = new System.Windows.Forms.Padding(2);
             this.DonatePictureBox.Name = "DonatePictureBox";
-            this.DonatePictureBox.Size = new System.Drawing.Size(92, 26);
+            this.DonatePictureBox.Size = new System.Drawing.Size(74, 21);
             this.DonatePictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.DonatePictureBox.TabIndex = 3;
             this.DonatePictureBox.TabStop = false;
@@ -105,23 +105,24 @@
             // linkLabel1
             // 
             this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(12, 19);
+            this.linkLabel1.Location = new System.Drawing.Point(10, 15);
             this.linkLabel1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(153, 17);
+            this.linkLabel1.Size = new System.Drawing.Size(116, 13);
             this.linkLabel1.TabIndex = 0;
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = "&Visit the official website";
+            this.linkLabel1.Visible = false;
             this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
             // UpdateLinkLabel
             // 
             this.UpdateLinkLabel.AutoSize = true;
             this.UpdateLinkLabel.Enabled = false;
-            this.UpdateLinkLabel.Location = new System.Drawing.Point(12, 19);
+            this.UpdateLinkLabel.Location = new System.Drawing.Point(10, 15);
             this.UpdateLinkLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.UpdateLinkLabel.Name = "UpdateLinkLabel";
-            this.UpdateLinkLabel.Size = new System.Drawing.Size(253, 17);
+            this.UpdateLinkLabel.Size = new System.Drawing.Size(192, 13);
             this.UpdateLinkLabel.TabIndex = 2;
             this.UpdateLinkLabel.TabStop = true;
             this.UpdateLinkLabel.Text = "&Version {0} is released! &Download now.";
@@ -134,8 +135,8 @@
             this.fileToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Padding = new System.Windows.Forms.Padding(5, 2, 0, 2);
-            this.menuStrip1.Size = new System.Drawing.Size(415, 26);
+            this.menuStrip1.Padding = new System.Windows.Forms.Padding(4, 2, 0, 2);
+            this.menuStrip1.Size = new System.Drawing.Size(332, 21);
             this.menuStrip1.TabIndex = 6;
             this.menuStrip1.Text = "menuStrip1";
             this.menuStrip1.Visible = false;
@@ -147,14 +148,14 @@
             this.openToolStripMenuItem,
             this.importJumplistPackToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(40, 22);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 17);
             this.fileToolStripMenuItem.Text = "File";
             // 
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
             this.newToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(258, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(222, 22);
             this.newToolStripMenuItem.Text = "New";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
@@ -162,7 +163,7 @@
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
             this.openToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(258, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(222, 22);
             this.openToolStripMenuItem.Text = "Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
@@ -170,7 +171,7 @@
             // 
             this.importJumplistPackToolStripMenuItem.Name = "importJumplistPackToolStripMenuItem";
             this.importJumplistPackToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.I)));
-            this.importJumplistPackToolStripMenuItem.Size = new System.Drawing.Size(258, 22);
+            this.importJumplistPackToolStripMenuItem.Size = new System.Drawing.Size(222, 22);
             this.importJumplistPackToolStripMenuItem.Text = "Import Jumplist Pack";
             this.importJumplistPackToolStripMenuItem.Click += new System.EventHandler(this.importJumplistPackToolStripMenuItem_Click);
             // 
@@ -180,33 +181,33 @@
             // 
             // StartImportButton
             // 
-            this.StartImportButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.StartImportButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.StartImportButton.BackColor = System.Drawing.Color.Transparent;
             this.StartImportButton.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.StartImportButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.StartImportButton.HelpText = "Import into a new or existing program.";
-            this.StartImportButton.Location = new System.Drawing.Point(11, 202);
+            this.StartImportButton.Location = new System.Drawing.Point(9, 162);
             this.StartImportButton.Margin = new System.Windows.Forms.Padding(2);
             this.StartImportButton.Name = "StartImportButton";
-            this.StartImportButton.Size = new System.Drawing.Size(388, 75);
+            this.StartImportButton.Size = new System.Drawing.Size(310, 60);
             this.StartImportButton.TabIndex = 2;
-            this.StartImportButton.Text = "I&mport a jumplist pack";
+            this.StartImportButton.Text = "I&mport a jump list pack";
             this.StartImportButton.UseVisualStyleBackColor = false;
             this.StartImportButton.Click += new System.EventHandler(this.StartImportButton_Click);
             // 
             // StartOpenButton
             // 
-            this.StartOpenButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.StartOpenButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.StartOpenButton.BackColor = System.Drawing.Color.Transparent;
             this.StartOpenButton.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.StartOpenButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.StartOpenButton.HelpText = "Open, toggle, or delete a previous jump list.";
-            this.StartOpenButton.Location = new System.Drawing.Point(11, 122);
+            this.StartOpenButton.Location = new System.Drawing.Point(9, 98);
             this.StartOpenButton.Margin = new System.Windows.Forms.Padding(2);
             this.StartOpenButton.Name = "StartOpenButton";
-            this.StartOpenButton.Size = new System.Drawing.Size(388, 75);
+            this.StartOpenButton.Size = new System.Drawing.Size(310, 60);
             this.StartOpenButton.TabIndex = 1;
             this.StartOpenButton.Text = "&Edit a previously saved jump list";
             this.StartOpenButton.UseVisualStyleBackColor = false;
@@ -214,16 +215,16 @@
             // 
             // StartNewButton
             // 
-            this.StartNewButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.StartNewButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.StartNewButton.BackColor = System.Drawing.Color.Transparent;
             this.StartNewButton.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.StartNewButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.StartNewButton.HelpText = "Start from a program shortcut or executable file";
-            this.StartNewButton.Location = new System.Drawing.Point(11, 42);
+            this.StartNewButton.Location = new System.Drawing.Point(9, 34);
             this.StartNewButton.Margin = new System.Windows.Forms.Padding(2);
             this.StartNewButton.Name = "StartNewButton";
-            this.StartNewButton.Size = new System.Drawing.Size(388, 75);
+            this.StartNewButton.Size = new System.Drawing.Size(310, 60);
             this.StartNewButton.TabIndex = 0;
             this.StartNewButton.Text = "Start a &new jump list";
             this.StartNewButton.UseVisualStyleBackColor = false;
@@ -231,10 +232,10 @@
             // 
             // StartForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(415, 348);
+            this.BackColor = System.Drawing.SystemColors.Window;
+            this.ClientSize = new System.Drawing.Size(332, 278);
             this.Controls.Add(this.StartImportButton);
             this.Controls.Add(this.ExitPanel);
             this.Controls.Add(this.StartOpenButton);

@@ -293,6 +293,7 @@ namespace T7EPreferences
             try
             {
                 JumpList dummyList = JumpList.CreateJumpListForAppId(appId);
+                dummyList.ClearAllUserTasks();
                 dummyList.Refresh();
 
                 // Set appid back
@@ -304,15 +305,16 @@ namespace T7EPreferences
         static public void SetAppIdBackAfterJumplist()
         {
             JumpList ownList = JumpList.CreateJumpListForAppId("T7E.Meta");
-            ownList.AddUserTasks(new JumpListLink
+            // BUG: WE NEED TO FIGURE OUT HOW TO RETURN JUMP LIST TO NORMAL
+            /*ownList.AddUserTasks(new JumpListLink
             {
                 Title = "Visit the official website",
                 Path = "%windir%\\explorer.exe",
                 Arguments = "\"http://jumplist.gsdn-media.com\"",
                 IconReference = new IconReference(Path.Combine(Common.EnvPath_SystemRoot, "system32\\shell32.dll"), 135)
-            });
+            });*/
             ownList.Refresh();
-            Common.TaskbarManagerInstance.SetCurrentProcessAppId("T7E.Meta");
+            Common.TaskbarManagerInstance.SetCurrentProcessAppId("");
         }
 
         static public bool ApplyJumplistToTaskbar(Primary parent)
@@ -414,13 +416,37 @@ namespace T7EPreferences
 
                 // ////////
                 JumpList dummyList = JumpList.CreateJumpListForAppId(parent.CurrentAppId);
-                dummyList.AddUserTasks(new JumpListLink
+                /*dummyList.AddUserTasks(new JumpListLink
                 {
                     Title = "Dummy",
                     Path = "%windir%\\explorer.exe"
-                });
+                });*/
+                dummyList.ClearAllUserTasks();
                 dummyList.Refresh();
                 newList.Refresh();
+                // Remove appid from own window!
+                SetAppIdBackAfterJumplist();
+                result = true;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("JumpList applying not successful." + "\r\n"
+                    + e.ToString());
+            }
+
+            return result;
+        }
+
+        static public bool ApplyBlankJumplistToTaskbar(Primary parent)
+        {
+            bool result = false;
+
+            try
+            {
+                // ////////
+                JumpList dummyList = JumpList.CreateJumpListForAppId(parent.CurrentAppId);
+                dummyList.ClearAllUserTasks();
+                dummyList.Refresh();
                 // Remove appid from own window!
                 SetAppIdBackAfterJumplist();
                 result = true;
@@ -774,7 +800,23 @@ namespace T7EPreferences
             string appListXmlPath = Path.Combine(Common.Path_AppData, "AppList.xml");
             if (File.Exists(appListXmlPath))
                 File.Copy(appListXmlPath, appListXmlPath + ".bak", true);
-            XmlTextWriter xmlWriter = new XmlTextWriter(appListXmlPath, null);
+
+            XmlTextWriter xmlWriter;
+            int retries = 10;
+            while (true)
+            {
+                try
+                {
+                    xmlWriter = new XmlTextWriter(appListXmlPath, null);
+                    break; // success!
+                }
+                catch
+                {
+                    if (--retries == 0) return;
+                    else System.Threading.Thread.Sleep(500);
+                }
+            }
+
             xmlWriter.WriteStartElement("appList");
             xmlWriter.WriteAttributeString("cleanAppIdsOnExit", "false");
             for (int i = 0; i < Common.AppCount; i++)

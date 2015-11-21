@@ -32,6 +32,8 @@ namespace T7EBackground
 
         Dictionary<string, string>[] Window_AppPairsChangesList = new Dictionary<string, string>[2];
 
+        Dictionary<string, string> TempShortcut_AppIdPairs = new Dictionary<string, string>();
+
         static TextWriter LogTxtFile;
 
         #region Start-Up
@@ -54,7 +56,8 @@ namespace T7EBackground
         /// </summary>
         private void HookShortcut()
         {
-            
+            if (DisableShortcutHooking) return;
+
             string basePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Microsoft\\Internet Explorer\\Quick Launch\\User Pinned");
 
             CommonLog("Hooking " + basePath + " for DirectoryName and FileName changes");
@@ -64,6 +67,7 @@ namespace T7EBackground
             LnkWatcher.Filter = "*.lnk";
             LnkWatcher.NotifyFilter = NotifyFilters.DirectoryName | NotifyFilters.FileName;
             LnkWatcher.Created += new FileSystemEventHandler(lnkWatcher_Created);
+            LnkWatcher.Deleted += new FileSystemEventHandler(LnkWatcher_Deleted);
             LnkWatcher.EnableRaisingEvents = true;
 
             CommonLog("Registered shortcut hook on " + basePath);
@@ -91,6 +95,8 @@ namespace T7EBackground
         /// </summary>
         private void HookUpdate()
         {
+            return; // dummying out
+
             CommonLog("Hooking " + Common.Path_AppData + "\\UpdateCheck2.txt for LastWrite changes");
 
             UpdateWatcher.Path = Common.Path_AppData;
@@ -104,6 +110,8 @@ namespace T7EBackground
 
         private void StartUpdateTimer()
         {
+            return; // dummying out
+
             CommonLog("Starting update timer");
             UpdateTimer.Start();
         }
@@ -128,6 +136,9 @@ namespace T7EBackground
             
             // Initialize variables
             Common.WindowHandle_Primary = this.Handle;
+
+            DisableShortcutChanging = false;// (Environment.OSVersion.Version.Major >= 10);
+            DisableShortcutHooking = false;// DisableShortcutChanging;
 
             // Sets handler for Ctrl+C on console
             Interop.SetConsoleCtrlHandler(new Interop.ConsoleCtrlDelegate(ConsoleCtrlCheck), true);
@@ -233,6 +244,8 @@ namespace T7EBackground
         /// </summary>
         private void CheckUpdateString()
         {
+            return; // dummying out
+
             CheckUpdateString(true);
         }
 
@@ -242,6 +255,8 @@ namespace T7EBackground
         /// <param name="download">Download UpdateCheck2.txt from the web server</param>
         private void CheckUpdateString(bool download)
         {
+            return; //dummying out
+
             // Download the file, first. This is on a new thread; it won't affect nothing(?)
             if (download)
             {
@@ -311,14 +326,25 @@ namespace T7EBackground
 
         private void UpdateTimer_Tick(object sender, EventArgs e)
         {
+            return; // dummying out
+
             ShowDonateBalloon();
 
             // Check UpdateCheck2.txt
             CheckUpdateString();
         }
 
+        private void ShowPinBalloon()
+        {
+            TrayIcon.BalloonTipIcon = ToolTipIcon.Info;
+            TrayIcon.BalloonTipTitle = "Repin the app when it is running";
+            TrayIcon.BalloonTipText = "Duplicate icons may appear.";
+        }
+
         private void ShowDonateBalloon()
         {
+            return; // dummying out
+
             // Show donate dialog
             DateTime installDate = DateTime.Today;
             bool installUpgrade = false;
@@ -342,6 +368,8 @@ namespace T7EBackground
 
         private void UpdateWatcher_Changed(object sender, EventArgs e)
         {
+            return; // dummying out
+
             // Check UpdateCheck2.txt, newly written
             CheckUpdateString(false);
         }
@@ -374,6 +402,9 @@ namespace T7EBackground
         /// </summary>
         private void UnhookShortcut()
         {
+            // remove if we will detect lnks for tray balloon prompt
+            if (DisableShortcutHooking) return;
+
             CommonLog("3. Unhook LNK watcher");
             LnkWatcher.EnableRaisingEvents = false;
             LnkWatcher.Dispose();
@@ -395,6 +426,7 @@ namespace T7EBackground
         /// </summary>
         private void CleanUp()
         {
+            T7EBackground.Program.CleaningUp = true;
             CommonLog("Closing app; cleaning up...", 1);
 
             UnhookWindows();
@@ -472,6 +504,9 @@ namespace T7EBackground
         }
 
         static public int LogIndentLevel = 0;
+        private bool DisableShortcutChanging;
+
+        public bool DisableShortcutHooking { get; private set; }
 
         static public void CommonLog(string messageString)
         {

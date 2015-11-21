@@ -19,6 +19,8 @@ namespace T7EBackground
         /// <param name="changesList">Compare list to compare to</param>
         private void CheckShortcutsAddedAppIds(List<string> shortcutList, Dictionary<string, string>[] changesList)
         {
+            if (DisableShortcutChanging) return;
+
             Dictionary<string, string> compareList;
             if (changesList[0].Count > 0)
                 compareList = changesList[0];
@@ -58,51 +60,59 @@ namespace T7EBackground
                     {
                         CommonLog("Shortcut matched!");
 
-                        // Is shortcut original, or tampered? Check its appId for T7E
-                        string lnkAppId = Common.TaskbarManagerInstance.GetApplicationIdForShortcut(lnkPath);
-                        string lnkFilename = Path.GetFileName(lnkPath);
-
-                        // Get the LNK paths
-                        string origLnkPath = Path.Combine(Common.Path_AppData, "OrigProperties\\" + lnkFilename);
-                        string modifiedLnkPath = Path.Combine(Common.Path_AppData, appId + "\\" + lnkFilename);
-
-                        if (lnkAppId.Length > 3 && lnkAppId.Substring(0, 3).Equals("T7E"))
+                        if (Environment.OSVersion.Version.Major >= 10)
                         {
-                            CommonLog("Shortcut has existing T7E AppId: " + lnkAppId);
-                            CommonLog("Copying original if it exists");
-
-                            // It's tampered. Copy over original to User Pinned
-                            if (File.Exists(origLnkPath))
-                                File.Copy(origLnkPath, lnkPath, true);
+                            CommonLog("Assigning app ID to pinned shortcut.");
+                            Common.TaskbarManagerInstance.SetApplicationIdForShortcut(lnkPath, appId);
                         }
                         else
                         {
-                            CommonLog("Shortcut is original, unmodified.");
-                            if (lnkAppId.Length > 3)
-                                CommonLog("Shortcut has its own AppId: " + lnkAppId);
+                            // Is shortcut original, or tampered? Check its appId for T7E
+                            string lnkAppId = Common.TaskbarManagerInstance.GetApplicationIdForShortcut(lnkPath);
+                            string lnkFilename = Path.GetFileName(lnkPath);
 
-                            // It's original. Copy the original to appdata
-                            File.Copy(lnkPath, origLnkPath, true);
+                            // Get the LNK paths
+                            string origLnkPath = Path.Combine(Common.Path_AppData, "OrigProperties\\" + lnkFilename);
+                            string modifiedLnkPath = Path.Combine(Common.Path_AppData, appId + "\\" + lnkFilename);
+
+                            if (lnkAppId.Length > 3 && lnkAppId.Substring(0, 3).Equals("T7E"))
+                            {
+                                CommonLog("Shortcut has existing T7E AppId: " + lnkAppId);
+                                CommonLog("Copying original if it exists");
+
+                                // It's tampered. Copy over original to User Pinned
+                                if (File.Exists(origLnkPath))
+                                    File.Copy(origLnkPath, lnkPath, true);
+                            }
+                            else
+                            {
+                                CommonLog("Shortcut is original, unmodified.");
+                                if (lnkAppId.Length > 3)
+                                    CommonLog("Shortcut has its own AppId: " + lnkAppId);
+
+                                // It's original. Copy the original to appdata
+                                File.Copy(lnkPath, origLnkPath, true);
+                            }
+
+
+                            // Apply T7E appId to modifiedLnkPath
+                            if (!File.Exists(modifiedLnkPath))
+                            {
+                                CommonLog("Modified shortcut backup does not exist -- creating.");
+                                File.Copy(lnkPath, modifiedLnkPath, true);
+                                Common.TaskbarManagerInstance.SetApplicationIdForShortcut(modifiedLnkPath, appId);
+                            }
+
+                            // Pin modifiedLnkPath shortcut
+                            CommonLog("Copying modified shortcut to pinned.");
+                            /*UnpinShortcut(lnkPath);
+                            if (lnkPath.LastIndexOf("StartMenu") > 0)
+                                PinShortcut(modifiedLnkPath, true);
+                            else
+                                PinShortcut(modifiedLnkPath, false);*/
+                            // I can just copy over the modified LNK. The jumplist will show.
+                            File.Copy(modifiedLnkPath, lnkPath, true);
                         }
-
-
-                        // Apply T7E appId to modifiedLnkPath
-                        if (!File.Exists(modifiedLnkPath))
-                        {
-                            CommonLog("Modified shortcut backup does not exist -- creating.");
-                            File.Copy(lnkPath, modifiedLnkPath, true);
-                            Common.TaskbarManagerInstance.SetApplicationIdForShortcut(modifiedLnkPath, appId);
-                        }
-
-                        // Pin modifiedLnkPath shortcut
-                        CommonLog("Copying modified shortcut to pinned.");
-                        /*UnpinShortcut(lnkPath);
-                        if (lnkPath.LastIndexOf("StartMenu") > 0)
-                            PinShortcut(modifiedLnkPath, true);
-                        else
-                            PinShortcut(modifiedLnkPath, false);*/
-                        // I can just copy over the modified LNK. The jumplist will show.
-                        File.Copy(modifiedLnkPath, lnkPath, true);
 
                         CommonLog("Finished checking appid.", -1);
 
@@ -123,6 +133,8 @@ namespace T7EBackground
         /// <param name="changesList">Compare list to compare to</param>
         private void CheckShortcutsDeletedAppIds(List<string> shortcutList, Dictionary<string,string>[] changesList)
         {
+            if (DisableShortcutChanging) return;
+
             if (changesList[1].Count > 0)
             {
                 Dictionary<string, string> deletedList = new Dictionary<string, string>();
@@ -155,27 +167,35 @@ namespace T7EBackground
                             string origLnkPath = Path.Combine(Common.Path_AppData, "OrigProperties\\" + lnkFilename);
 
                             // Replace the shortcut with the original, if exists
-                            if (File.Exists(origLnkPath))
+                            if (Environment.OSVersion.Version.Major >= 10)
                             {
-                                CommonLog("Pinning/Unpinning original shortcut");
-
-                                // Pin original shortcut
-                                UnpinShortcut(lnkPath);
-                                if (lnkPath.LastIndexOf("StartMenu") > 0)
-                                    PinShortcut(origLnkPath, true);
-                                else
-                                    PinShortcut(origLnkPath, false);
-                                //File.Copy(origLnkPath, lnkPath, true);
-                                //File.Delete(origLnkPath);
+                                CommonLog("Removing application ID from original shortcut");
+                                Common.TaskbarManagerInstance.SetApplicationIdForShortcut(lnkPath, "");
                             }
                             else
                             {
-                                CommonLog("Original shortcut backup does not exist, creating blank AppId shortcut");
-                                // If it doesn't exist, just remove T7E from lnkPath
-                                string tmpLnkPath = Path.Combine(Path.GetTempPath(), lnkFilename);
-                                File.Copy(lnkPath, tmpLnkPath, true);
-                                Common.TaskbarManagerInstance.SetApplicationIdForShortcut(tmpLnkPath, "");
-                                origLnkPath = tmpLnkPath;
+                                if (File.Exists(origLnkPath))
+                                {
+                                    CommonLog("Pinning/Unpinning original shortcut");
+
+                                    // Pin original shortcut
+                                    UnpinShortcut(lnkPath);
+                                    if (lnkPath.LastIndexOf("StartMenu") > 0)
+                                        PinShortcut(origLnkPath, true);
+                                    else
+                                        PinShortcut(origLnkPath, false);
+                                    //File.Copy(origLnkPath, lnkPath, true);
+                                    //File.Delete(origLnkPath);
+                                }
+                                else
+                                {
+                                    CommonLog("Original shortcut backup does not exist, creating blank AppId shortcut");
+                                    // If it doesn't exist, just remove T7E from lnkPath
+                                    string tmpLnkPath = Path.Combine(Path.GetTempPath(), lnkFilename);
+                                    File.Copy(lnkPath, tmpLnkPath, true);
+                                    Common.TaskbarManagerInstance.SetApplicationIdForShortcut(tmpLnkPath, "");
+                                    origLnkPath = tmpLnkPath;
+                                }
                             }
 
                             CommonLog(-1);
@@ -201,12 +221,28 @@ namespace T7EBackground
 
         private void UnpinShortcut(string lnkPath)
         {
+            // If lnk is on a network dir, it needs to be copied to local temp
+            // Windows remembers which shortcuts are pinned to taskbar
+            if (!File.Exists(lnkPath)) return;
+
+            if (DisableShortcutChanging) return;
+
+            string tempLnkPath = "";
+            if (Interop.PathIsNetworkPath(lnkPath))
+            {
+                tempLnkPath = Path.Combine(Path.GetTempPath(), Path.GetFileName(lnkPath));
+                File.Copy(lnkPath, tempLnkPath);
+                lnkPath = tempLnkPath;
+
+                if (!File.Exists(lnkPath)) return;
+            }
+
             // Unpinning shortcuts is under UnpinShortcut()
             IntPtr shell32Module = Interop.GetModuleHandle("shell32.dll");
 
             string command;
             if (lnkPath.Contains("StartMenu"))
-                command = GetStringResource(shell32Module, 5382); // Unpin from Start Men&u
+                command = GetStringResource(shell32Module, 5382); // Unpin from Start Men&u // win8+: 51394
             else
                 command = GetStringResource(shell32Module, 5387); // Unpin from Tas&kbar
 
@@ -218,17 +254,36 @@ namespace T7EBackground
                 "",
                 "",
                 Interop.ShowCommands.SW_HIDE);
+
+            if (File.Exists(tempLnkPath)) File.Delete(tempLnkPath);
         }
 
         private void PinShortcut(string lnkPath, bool pinStartMenu)
         {
+            // If lnk is on a network dir, it needs to be copied to local temp
+            // Windows remembers which shortcuts are pinned to taskbar
+            // Does T7EBackground need to be local too???
+            if (!File.Exists(lnkPath)) return;
+
+            if (DisableShortcutChanging) return;
+
+            string tempLnkPath = "";
+            if(Interop.PathIsNetworkPath(lnkPath))
+            {
+                tempLnkPath = Path.Combine(Path.GetTempPath(), Path.GetFileName(lnkPath));
+                File.Copy(lnkPath, tempLnkPath);
+                lnkPath = tempLnkPath;
+
+                if (!File.Exists(lnkPath)) return;
+            }
+
             LnkWatcher.EnableRaisingEvents = false;
 
             IntPtr shell32Module = Interop.GetModuleHandle("shell32.dll");
 
             string command;
             if (pinStartMenu)
-                command = GetStringResource(shell32Module, 5381); // Pin to Start Men&u
+                command = GetStringResource(shell32Module, 5381); // Pin to Start Men&u // win8+: 51201
             else
                 command = GetStringResource(shell32Module, 5386); // Pin to Tas&kbar
 
@@ -243,6 +298,130 @@ namespace T7EBackground
 
             if (LnkWatcher.Path.Length > 0)
                 LnkWatcher.EnableRaisingEvents = true;
+
+            if (File.Exists(tempLnkPath)) File.Delete(tempLnkPath);
+        }
+
+        private void UnpinTempShortcut(IntPtr hWnd, string appId)
+        {
+            if (DisableShortcutChanging) return;
+
+            string hwndProcessPath = "";
+            string hwndProcessName = "";
+            string tempLnkPath = "";
+
+            if(!IntPtr.Equals(hWnd, IntPtr.Zero))
+            {
+                // Get process ID from window
+                int hwndPid;
+                Interop.GetWindowThreadProcessId(hWnd, out hwndPid);
+
+                // Get process handle from pID; get process path from handle
+                IntPtr hwndPidHandle = Interop.OpenProcess(Interop.ProcessAccess.QueryInformation | Interop.ProcessAccess.VMRead, false, hwndPid);
+                StringBuilder hwndProcessNameString = new StringBuilder(260);
+                Interop.GetModuleFileNameEx(hwndPidHandle, IntPtr.Zero, hwndProcessNameString, 260);
+                Interop.CloseHandle(hwndPidHandle);
+
+                try { hwndProcessPath = hwndProcessNameString.ToString(); }
+                catch (Exception e) { return; }
+
+                if (!File.Exists(hwndProcessPath)) return;
+
+                hwndProcessName = Path.GetFileNameWithoutExtension(hwndProcessPath).ToLower();
+
+                tempLnkPath = Path.Combine(Common.Path_AppData, "TempShortcuts" + "\\" + hwndProcessName + ".lnk");
+            }
+            else
+            {
+                // Get lnk from appId
+                foreach (KeyValuePair<string, string> lnkPair in TempShortcut_AppIdPairs)
+                {
+                    string lnkName = lnkPair.Key;
+                    string lnkAppId = lnkPair.Value;
+
+                    if (appId == lnkAppId)
+                    {
+                        hwndProcessName = Path.GetFileNameWithoutExtension(lnkName).ToLower();
+                        tempLnkPath = lnkName;
+                    }
+                }
+            }
+
+            if (!IsAppPinnedByProcessName(hwndProcessName)) return;
+
+            if (File.Exists(tempLnkPath))
+            {
+                if (TempShortcut_AppIdPairs.ContainsKey(tempLnkPath))
+                    TempShortcut_AppIdPairs.Remove(tempLnkPath);
+
+                UnpinShortcut(tempLnkPath);
+                File.Delete(tempLnkPath);
+            }
+            
+        }
+
+        private void PinTempShortcutFromHwnd(IntPtr hWnd, string appId)
+        {
+            if (DisableShortcutChanging) return;
+
+            // Get process ID from window
+            int hwndPid;
+            Interop.GetWindowThreadProcessId(hWnd, out hwndPid);
+
+            // Get process handle from pID; get process path from handle
+            IntPtr hwndPidHandle = Interop.OpenProcess(Interop.ProcessAccess.QueryInformation | Interop.ProcessAccess.VMRead, false, hwndPid);
+            StringBuilder hwndProcessNameString = new StringBuilder(260);
+            Interop.GetModuleFileNameEx(hwndPidHandle, IntPtr.Zero, hwndProcessNameString, 260);
+            Interop.CloseHandle(hwndPidHandle);
+
+            string hwndProcessPath;
+            try { hwndProcessPath = hwndProcessNameString.ToString(); }
+            catch (Exception e) { return; }
+
+            if (!File.Exists(hwndProcessPath)) return;
+
+            string hwndProcessName = Path.GetFileNameWithoutExtension(hwndProcessPath).ToLower();
+
+            if(IsAppPinnedByProcessName(hwndProcessName)) return;
+
+            string newLnkPath = Path.Combine(Common.Path_AppData, "TempShortcuts" + "\\" + hwndProcessName + ".lnk");
+
+            using (ShellLink shortcut = new ShellLink())
+            {
+                shortcut.Target = hwndProcessPath;
+                shortcut.WorkingDirectory = Path.GetDirectoryName(hwndProcessPath);
+                shortcut.Description = hwndProcessName;
+                shortcut.DisplayMode = ShellLink.LinkDisplayMode.edmNormal;
+                shortcut.Save(newLnkPath);
+            }
+
+            Common.TaskbarManagerInstance.SetApplicationIdForShortcut(newLnkPath, appId);
+
+            if (TempShortcut_AppIdPairs.ContainsKey(newLnkPath))
+                TempShortcut_AppIdPairs.Remove(newLnkPath);
+            TempShortcut_AppIdPairs.Add(newLnkPath, appId);
+
+            PinShortcut(newLnkPath, false);
+        }
+
+        private bool IsAppPinnedByProcessName(string processName)
+        {
+            if (processName.Length < 1) return false;
+
+            // Check for all shortcuts under %appdata%\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar and StartMenu
+            List<string> shortcutList = new List<string>();
+            string userPinnedPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Microsoft\\Internet Explorer\\Quick Launch\\User Pinned");
+            DirectoryInfo di = new DirectoryInfo(userPinnedPath);
+            FileInfo[] lnkInfo = di.GetFiles("*.lnk", SearchOption.AllDirectories);
+
+            foreach (FileInfo lnk in lnkInfo)
+            {
+                string targetName = Path.GetFileNameWithoutExtension(Common.ResolveLnkPath(lnk.FullName)).ToLower();
+
+                if (processName.ToLower() == targetName) return true;
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -280,9 +459,11 @@ namespace T7EBackground
         /// <param name="changesList">Two-part Dictionary array, consisting of added AppIds and deleted AppIds</param>
         private void AssignAppIdsToShortcuts(string shortcutPath, Dictionary<string, string>[] changesList)
         {
+            if (DisableShortcutChanging) return;
+
             CommonLog("Assigning AppIds to User Pinned shortcuts", 1);
 
-            // First, populate shortcutList with all shortcuts we want to check
+            // First, populate shortcutList with all shortcutrs we want to check
             List<string> shortcutList = new List<string>();
             if (File.Exists(shortcutPath))
                 shortcutList.Add(shortcutPath); // Only check for this
@@ -322,13 +503,43 @@ namespace T7EBackground
                 else return;
             }
 
+            //System.Windows.Forms.MessageBox.Show(Common.TaskbarManagerInstance.GetApplicationIdForShortcut(e.FullPath));
+
             CommonLog("Detected new shortcut: " + e.FullPath, 1);
 
             // Assign appid to last created shortcut
-            AssignAppIdsToShortcuts(e.FullPath);
+            if (!DisableShortcutChanging)
+                AssignAppIdsToShortcuts(e.FullPath);
 
             CommonLog("Finished handling new shortcut.", 0);
         }
+
+
+        private void LnkWatcher_Deleted(object sender, FileSystemEventArgs e)
+        {
+            // We need to assign a blank appid to any open windows
+            // and, if not win10 rtm, then reassign the appid
+
+            /*
+            // Check if lnk file is in temp pinned list; if so, repin.
+            // Jump list removals should result in removal from pin list before this event is called
+
+            foreach (KeyValuePair<string, string> lnkPair in TempShortcut_AppIdPairs)
+            {
+                string lnkName = lnkPair.Key;
+                string appId = lnkPair.Value;
+
+                // We need to assign a blank appid to any open windows
+                // and, if not win10 rtm, then reassign the appid
+
+                if(Path.GetFileNameWithoutExtension(e.FullPath) == Path.GetFileNameWithoutExtension(lnkName))
+                {
+                    PinShortcut(lnkName, false); 
+                }
+            }
+            */
+        }
+        
         #endregion
+        }
     }
-}

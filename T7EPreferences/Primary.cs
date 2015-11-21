@@ -154,9 +154,23 @@ namespace T7EPreferences
             //but that's because the operation sets our appid to something different.
             Common.ReadTemplates();
 
+            // dummying out donate balloon
+            //Common.WritePref("DonateDialogDisable", true.ToString());
+            //Common.WritePref("DonateBalloonDisable", true.ToString());
+
             bool donateBalloonShown = false;
-            bool.TryParse(Common.ReadPref("DonateBalloonShown"), out donateBalloonShown);
+            //bool.TryParse(Common.ReadPref("DonateBalloonShown"), out donateBalloonShown); //dummying out
             if (!donateBalloonShown) disableDonationBalloonToolStripMenuItem.Visible = false;
+
+            if(Environment.OSVersion.Version.Major >= 10 && Environment.OSVersion.Version.Build >= 10586)
+            {
+                bool hidePinPromptOptional = false;
+                if (Common.PrefExists("HidePinPromptOptional")) bool.TryParse(Common.ReadPref("HidePinPromptOptional"), out hidePinPromptOptional);
+                HidePinPromptOptionalOptionMenuItem.Checked = hidePinPromptOptional;
+
+                HidePinPromptOptionalOptionMenuItem.Visible = HidePinPromptOptionalOptionMenuItem.Enabled = true;
+                OptionToolStripSeparator.Visible = true;
+            }
 
             TaskKBDKeyboardTextBox.SetParent(this);
 
@@ -193,6 +207,7 @@ namespace T7EPreferences
 
         public void ShowDonateDialog(bool deliberate)
         {
+            return; // dummying out, 2015
             Donate donateForm = new Donate(deliberate);
             donateForm.Show();
         }
@@ -202,20 +217,28 @@ namespace T7EPreferences
             StartDialog_Label: 
             using (Form startForm = new StartForm(this))
             {
+                StartDialogResult = 0;
+
+                if (this.Visible) return; // should not show this when form is visible
+
                 DialogResult startResult = startForm.ShowDialog();
 
                 if (startResult == DialogResult.Cancel)
                 {
                     // Exit the app
-                    Environment.Exit(-1);
+                    if(!this.Visible)
+                        Environment.Exit(-1);
                 }
 
                 // Else, DialogResult.OK is OK.
-                startForm.Hide();
+                //startForm.Hide();
+                //startForm.Close();
                 startForm.Dispose();
+
                 switch ((StartDialogResults)StartDialogResult)
                 {
                     case StartDialogResults.NewApp:
+                        this.Hide();
                         bool openAppResult = OpenProgramFile();
                         if (!openAppResult)
                             goto StartDialog_Label;
@@ -226,11 +249,13 @@ namespace T7EPreferences
                         }
                         break;
                     case StartDialogResults.OpenApp:
+                        this.Hide();
                         bool openManageAppResult = OpenManageProgramFile();
                         if (!openManageAppResult)
                             goto StartDialog_Label;
                         break;
                     case StartDialogResults.OpenPack:
+                        this.Hide();
                         if (!ImportPack("the current program"))
                         {
                             // Check if edit window is visible. If it isn't, show.
@@ -239,7 +264,8 @@ namespace T7EPreferences
                         }
                         break;
                     default:
-                        Environment.Exit(-1);
+                        if (!this.Visible)
+                            Environment.Exit(-1);
                         break;
                 }
             }
@@ -257,7 +283,11 @@ namespace T7EPreferences
                 || openForm.SelectedAppId.Length <= 0)
             {
                 openForm.Dispose();
-                if (!Visible) Application.Exit(); // TODO: Make this show start dialog
+                if (!Visible)
+                {
+                    //Application.Exit(); // TODO: Make this show start dialog
+                    ShowStartDialog();
+                }
                 return false;
             }
 
@@ -272,31 +302,39 @@ namespace T7EPreferences
 
         private bool OpenProgramFile(string startPath)
         {
-            OpenFileDialog programFileDialog = new OpenFileDialog();
-            programFileDialog.Filter = "Program files (*.exe;*.lnk)|*.exe|All files (*.*)|*.*";
-            programFileDialog.FilterIndex = 0;
-            if (Directory.Exists(startPath))
-                programFileDialog.InitialDirectory = startPath;
-            else
-                programFileDialog.InitialDirectory =
-                File.Exists(Path.Combine(Common.Path_AppData, "Programs.library-ms")) ?
-                Path.Combine(Common.Path_AppData, "Programs.library-ms")
-                : Path.Combine(Common.EnvPath_AllUsersProfile, "Microsoft\\Windows\\Start Menu");
-            programFileDialog.Title = "Select program file";
-            programFileDialog.AutoUpgradeEnabled = true;
-            //programFileDialog.ShowHelp = true;
-            programFileDialog.DereferenceLinks = false;//false
-            
-            DialogResult fileResult = programFileDialog.ShowDialog();
-
-            if (fileResult != DialogResult.OK)
+            string programFileName = "";
+            if (File.Exists(startPath))
             {
-                programFileDialog.Dispose();
-                return false;
+                programFileName = startPath;
             }
+            else
+            {
+                OpenFileDialog programFileDialog = new OpenFileDialog();
+                programFileDialog.Filter = "Program files (*.exe;*.lnk)|*.exe|All files (*.*)|*.*";
+                programFileDialog.FilterIndex = 0;
+                if (Directory.Exists(startPath))
+                    programFileDialog.InitialDirectory = startPath;
+                else
+                    programFileDialog.InitialDirectory =
+                    File.Exists(Path.Combine(Common.Path_AppData, "Programs.library-ms")) ?
+                    Path.Combine(Common.Path_AppData, "Programs.library-ms")
+                    : Path.Combine(Common.EnvPath_AllUsersProfile, "Microsoft\\Windows\\Start Menu");
+                programFileDialog.Title = "Select program file";
+                programFileDialog.AutoUpgradeEnabled = true;
+                //programFileDialog.ShowHelp = true;
+                programFileDialog.DereferenceLinks = false;//false
 
-            programFileDialog.Dispose();
-            string programFileName = programFileDialog.FileName;
+                DialogResult fileResult = programFileDialog.ShowDialog();
+
+                if (fileResult != DialogResult.OK)
+                {
+                    programFileDialog.Dispose();
+                    return false;
+                }
+
+                programFileDialog.Dispose();
+                programFileName = programFileDialog.FileName;
+            }
 
             // Try to resolve it as an mSI shortcut
             //string msiOutput = MsiShortcutParser.ParseShortcut(programFileName);
@@ -456,6 +494,8 @@ namespace T7EPreferences
                     JumplistListBox.SelectedItem = jlio;
                     break;
                 }
+
+            ChangeStatusBarText("Ready.");
 
             // And show the window
             Show();
@@ -1449,6 +1489,7 @@ namespace T7EPreferences
         private void MenuFileOpen_Click(object sender, EventArgs e)
         {
             OpenManageProgramFile();
+
         }
 
         private void JumplistListBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -1545,9 +1586,17 @@ namespace T7EPreferences
 
         System.ComponentModel.BackgroundWorker StatusBarBackgroundWorker;
 
+        string StatusLog = "";
+
         private void ChangeStatusBarText(string statusText)
         {
-            ToolBarStatusLabel.Text = statusText;
+            string statusString = String.Format("[{0}] {1}", DateTime.Now.ToLongTimeString(), statusText);
+
+            StatusLog = StatusLog + statusString + Environment.NewLine;
+
+            ToolBarStatusLabel.Text = statusString;
+
+            //return; // 0.4-B: Trying to disable this and instead add a timestamp // implement a fade?
             StatusBarBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             StatusBarBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(StatusBarBackgroundWorker_DoWork);
             StatusBarBackgroundWorker.RunWorkerAsync(null);
@@ -1555,6 +1604,24 @@ namespace T7EPreferences
 
         void StatusBarBackgroundWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
+            // 0.4-B: Blink the text (or bold it?)
+            //ToolBarStatusLabel.Font = new Font(ToolBarStatusLabel.Font, FontStyle.Bold);
+            //ToolBarStatusLabel.Font = new Font(ToolBarStatusLabel.Font, FontStyle.Regular);
+            ToolBarStatusLabel.Visible = false;
+            Thread.Sleep(250);
+            ToolBarStatusLabel.Visible = true;
+            Thread.Sleep(250);
+            ToolBarStatusLabel.Visible = false;
+            Thread.Sleep(250);
+            ToolBarStatusLabel.Visible = true;
+            /*Thread.Sleep(250);
+            ToolBarStatusLabel.Visible = false;
+            Thread.Sleep(250);
+            ToolBarStatusLabel.Visible = true;*/
+
+            return;
+
+            // old behavior: wait 10 seconds then replace the text
             Thread.Sleep(10000);
             ToolBarStatusLabel.Text = "Ready";
         }
@@ -2049,12 +2116,114 @@ For more advanced features than these two modes allow, use ""Run AutoHotKey Scri
             EditCounter++;
         }
 
+        public string GetLnkPathForTargetName(string processName)
+        {
+            try
+            {
+                if (processName.Length < 1) return "";
+
+                // Check for all shortcuts under %appdata%\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar and StartMenu
+                List<string> shortcutList = new List<string>();
+                string userPinnedPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Microsoft\\Internet Explorer\\Quick Launch\\User Pinned");
+                DirectoryInfo di = new DirectoryInfo(userPinnedPath);
+                FileInfo[] lnkInfo = di.GetFiles("*.lnk", SearchOption.AllDirectories);
+
+                foreach (FileInfo lnk in lnkInfo)
+                {
+                    string targetName = Path.GetFileNameWithoutExtension(Common.ResolveLnkPath(lnk.FullName)).ToLower();
+
+                    if (processName.ToLower() == targetName) return lnk.FullName;
+                }
+
+                return "";
+            } catch (Exception e)
+            {
+
+            }
+
+            return "";
+        }
+
         private void saveAndApplyToTaskbarToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            string saveMessage = "";
+
+            if (Environment.OSVersion.Version.Major >= 10)
+            {
+                string existingLnkPath = GetLnkPathForTargetName(Path.GetFileNameWithoutExtension(_CurrentAppPath).ToLower());
+                if(File.Exists(existingLnkPath) && Common.TaskbarManagerInstance.GetApplicationIdForShortcut(existingLnkPath) != CurrentAppId)
+                {
+                    DialogResult unpinResult = new PinPrompt(true, existingLnkPath, _CurrentAppName, _CurrentAppPath, CurrentAppId).ShowDialog();
+                    if(unpinResult != DialogResult.OK)
+                    {
+                        ChangeStatusBarText("Jump list was not saved. The app needs to be unpinned from taskbar before saving.");
+                        return;
+                    }
+                }
+            }
+
             Preferences.SaveApp(this);
             Preferences.ApplyJumplistToTaskbar(this);
+
+            if (Environment.OSVersion.Version.Major >= 10)
+            {
+                string existingLnkPath = GetLnkPathForTargetName(Path.GetFileNameWithoutExtension(_CurrentAppPath).ToLower());
+                if ((File.Exists(existingLnkPath) && Common.TaskbarManagerInstance.GetApplicationIdForShortcut(existingLnkPath) != CurrentAppId) || !File.Exists(existingLnkPath))
+                {
+                    bool hidePinPromptOptional = false;
+                    if (Environment.OSVersion.Version.Build >= 10586)
+                    {
+                        if (Common.PrefExists("HidePinPromptOptional")) bool.TryParse(Common.ReadPref("HidePinPromptOptional"), out hidePinPromptOptional);
+                    }
+
+                    if (!hidePinPromptOptional)
+                    {
+                        DialogResult pinResult = new PinPrompt(false, "", _CurrentAppName, _CurrentAppPath, CurrentAppId, (Environment.OSVersion.Version.Build < 10586)).ShowDialog();
+                        if (pinResult != DialogResult.OK)
+                        {
+                            //Preferences.ApplyBlankJumplistToTaskbar(this);
+
+                            ChangeStatusBarText("Jump list was saved, but you'll need to run and pin the app to taskbar before using it.");
+                            return;
+                        }
+                    }/* else
+                    {
+                        ChangeStatusBarText("Jump list saved. If it does not appear, unpin the app, run it, then repin it to taskbar.");
+                        return;
+                    }*/
+                }
+                else if(File.Exists(existingLnkPath) && Common.TaskbarManagerInstance.GetApplicationIdForShortcut(existingLnkPath) == CurrentAppId)
+                {
+                    saveMessage = "Jump list saved. If it does not appear, unpin the app, run it, then repin it to taskbar.";
+                }
+                
+                    this.TopMost = true;
+                    this.TopMost = false;
+                
+            }
+
             AppReallyNew = false;
-            ChangeStatusBarText("Settings saved to taskbar! Right-click your program's shortcut to test it.");
+
+            if(Environment.OSVersion.Version.Major >= 10)
+            {
+                if(Environment.OSVersion.Version.Build < 10586)
+                {
+                    // Check if the shortcut is pinned. If it is, the message should read just to run the app first.
+                    if(saveMessage.Length < 1) saveMessage = "Jump list saved. Right-click your program's shortcut to test it.";
+                }
+                else
+                {
+                    // Check if the shortcut is pinned. If it is, the message should read to run the app first.
+                    saveMessage = "Jump list saved. Run the app to see the jump list.";
+                }
+            }
+            else
+            {
+                saveMessage = "Jump list saved. Right-click your program's shortcut to test it.";
+            }
+
+            ChangeStatusBarText(saveMessage);
+
             EditCounter++;
         }
 
@@ -2166,10 +2335,17 @@ For more advanced features than these two modes allow, use ""Run AutoHotKey Scri
             // But is this desirable? Is it better for the user to select the window?
             if (loadNewApp)
             {
-                if (!OpenProgramFile()) return false; // Closes open app, opens new app
-                else if (AppReallyNew)
+                if (packInfo[0].Length <= 0)
                 {
+                    if (!OpenProgramFile()) return false; // Closes open app, opens new app
+                }
+                else
+                {
+                    if (!OpenProgramFile(packInfo[1])) return false;
+                }
 
+                if (AppReallyNew)
+                {
                     //MessageBox.Show(packInfo[0] + "|" + packInfo[1] + "|" + packInfo[2]);
                     if (packInfo[0].Length <= 0) SelectMainAppWindow(true);
                     else
@@ -2208,10 +2384,12 @@ For more advanced features than these two modes allow, use ""Run AutoHotKey Scri
             // Load the pack!
             Preferences.LoadJumplistPack(packPath);
 
-            //if (AppReallyNew) saveAndApplyToTaskbarToolStripMenuItem.PerformClick(); // One-click importing for new apps
+            // 0.4-B feature: one-click importing
+            if (AppReallyNew) saveAndApplyToTaskbarToolStripMenuItem.PerformClick(); // One-click importing for new apps
 
             // Select the jumplist tab when done!
-            if(loadNewApp) TabControl.SelectedIndex = 1;
+            if(loadNewApp && !AppReallyNew) TabControl.SelectedIndex = 1;
+
             // Select the first task
             for (int i = 0; i < JumplistListBox.Items.Count; i++)
             {
@@ -2861,6 +3039,8 @@ Ctrl+P -- Export a Jumplist Pack");
             // We aren't going to download UpdateCheck2.txt here, 'cuz StartForm already did.
             // Just check the stored UpdateCheck2.txt.
 
+            return; //dummying out
+
             if (!File.Exists(Path.Combine(Common.Path_AppData, "UpdateCheck2.txt"))) return;
             if (!Common.SanitizeUpdateResponse(File.ReadAllText(Path.Combine(Common.Path_AppData, "UpdateCheck2.txt"))))
             {
@@ -2913,6 +3093,17 @@ Ctrl+P -- Export a Jumplist Pack");
         private void TaskKBDMinimizeAfterwardCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             _CurrentJumplistItem.TaskKBDMinimizeAfterward = TaskKBDMinimizeAfterwardCheckBox.Checked;
+        }
+
+        private void StatusBar_Click(object sender, EventArgs e)
+        {
+            new HelpDialog("Status Log", StatusLog).Show();
+        }
+
+        private void HidePinPromptOptionalOptionMenuItem_Click(object sender, EventArgs e)
+        {
+            HidePinPromptOptionalOptionMenuItem.Checked = !HidePinPromptOptionalOptionMenuItem.Checked;
+            Common.WritePref("HidePinPromptOptional", HidePinPromptOptionalOptionMenuItem.Checked.ToString());
         }
     }
 }

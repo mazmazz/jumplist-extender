@@ -167,8 +167,37 @@ namespace T7EPreferences
             string appPath = ManageListView.SelectedItems[0].SubItems[1].Text;
             string appId = ManageListView.SelectedItems[0].SubItems[2].Text;
 
+            if (Environment.OSVersion.Version.Major >= 10)
+            {
+                string existingLnkPath = PrimaryParent.GetLnkPathForTargetName(Path.GetFileNameWithoutExtension(appPath).ToLower());
+                if (File.Exists(existingLnkPath))
+                {
+                    DialogResult unpinResult = new PinPrompt(true, existingLnkPath, appName, appPath, appId).ShowDialog();
+                    if (unpinResult != DialogResult.OK)
+                    {
+                        return;
+                    }
+                }
+            }
+
             // Enable app
             Preferences.EnableApp(appId, appPath);
+
+            if (Environment.OSVersion.Version.Major >= 10)
+            {
+                DialogResult unpinResult = new PinPrompt(false, "", appName, appPath, appId, (Environment.OSVersion.Version.Build < 10586)).ShowDialog();
+                if (unpinResult != DialogResult.OK)
+                {
+                    //Preferences.EraseJumplist(appId);
+                    //Preferences.DisableApp(appId, appPath, appName);
+
+                    return;
+                } else
+                {
+                    this.TopMost = true;
+                    this.TopMost = false;
+                }
+            }
 
             // Refresh applist
             PopulateManageListBox();
@@ -191,8 +220,18 @@ namespace T7EPreferences
 
             if (deleteDialogResult != System.Windows.Forms.DialogResult.Yes) return;
 
+            string currentLnkPath = PrimaryParent.GetLnkPathForTargetName(Path.GetFileNameWithoutExtension(appPath).ToLower());
+            if (File.Exists(currentLnkPath) && Common.TaskbarManagerInstance.GetApplicationIdForShortcut(currentLnkPath) == appId)
+            {
+                DialogResult unpinResult = new PinPrompt(true, currentLnkPath, appName, appPath, appId).ShowDialog();
+                if (unpinResult != DialogResult.OK)
+                {
+                    return;
+                }
+            }
+
             if (PrimaryParent.CurrentAppId != null && PrimaryParent.CurrentAppId.Equals(appId))
-                if (!PrimaryParent.ClearAppLoaded(true, false)) return; 
+                if (!PrimaryParent.ClearAppLoaded(true, false)) return;
 
             // Delete app from internal, applist.xml, and appdata
             if (ManageListView.SelectedItems[0].Group == ManageListView.Groups[1])
@@ -214,6 +253,16 @@ namespace T7EPreferences
             string appName = ManageListView.SelectedItems[0].SubItems[0].Text;
             string appPath = ManageListView.SelectedItems[0].SubItems[1].Text;
             string appId = ManageListView.SelectedItems[0].SubItems[2].Text;
+
+            string currentLnkPath = PrimaryParent.GetLnkPathForTargetName(Path.GetFileNameWithoutExtension(appPath).ToLower());
+            if (File.Exists(currentLnkPath) && Common.TaskbarManagerInstance.GetApplicationIdForShortcut(currentLnkPath) == appId)
+            {
+                DialogResult unpinResult = new PinPrompt(true, currentLnkPath, appName, appPath, appId).ShowDialog();
+                if (unpinResult != DialogResult.OK)
+                {
+                    return;
+                }
+            }
 
             if (PrimaryParent.CurrentAppId != null && PrimaryParent.CurrentAppId.Equals(appId))
             {
@@ -291,6 +340,8 @@ namespace T7EPreferences
                 ManageImportButton.Enabled = 
                     ManageDisableButton.Visible =
                     true;
+
+                ExitButton.Text = "&Close";
             }
             else
             {
@@ -302,6 +353,8 @@ namespace T7EPreferences
                     FileOpenButton.Enabled =
                     true;
 
+                ExitButton.Text = "&Cancel";
+
                 ManageEnableButton.Visible =
                         ManageEnableButton.Enabled =
                         false;
@@ -311,6 +364,8 @@ namespace T7EPreferences
                     ManageImportButton.Enabled =
                         FileOpenButton.Enabled =
                         false;
+
+                    ExitButton.Text = "&Close";
                 }
 
                 if (ManageListView.SelectedItems[0].Group == ManageListView.Groups[1])

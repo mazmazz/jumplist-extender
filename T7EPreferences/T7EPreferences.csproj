@@ -52,7 +52,7 @@
     <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>bin\x86\Release\</OutputPath>
+    <OutputPath>..\bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
@@ -61,8 +61,10 @@
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
     <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
   </PropertyGroup>
+  <PropertyGroup />
+  <PropertyGroup />
   <PropertyGroup>
-    <NoWin32Manifest>true</NoWin32Manifest>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationCore">
@@ -136,6 +138,12 @@
     <Compile Include="ManageForm.Designer.cs">
       <DependentUpon>ManageForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="PinPrompt.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PinPrompt.Designer.cs">
+      <DependentUpon>PinPrompt.cs</DependentUpon>
+    </Compile>
     <Compile Include="Primary.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -163,6 +171,9 @@
     <EmbeddedResource Include="ManageForm.resx">
       <DependentUpon>ManageForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="PinPrompt.resx">
+      <DependentUpon>PinPrompt.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Primary.resx">
       <DependentUpon>Primary.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -183,6 +194,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="App.config" />
+    <None Include="app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -208,23 +221,31 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Libraries\IconLib\IconLib.csproj">
-      <Project>{CE53747F-D2E6-4E1E-9EF4-A0AE02671B1D}</Project>
+      <Project>{ce53747f-d2e6-4e1e-9ef4-a0ae02671b1d}</Project>
       <Name>IconLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\Libraries\ImageComboBox\ImageComboBox.csproj">
-      <Project>{33D6FF5D-C30C-4976-B35D-98CDF7519BA0}</Project>
+      <Project>{33d6ff5d-c30c-4976-b35d-98cdf7519ba0}</Project>
       <Name>ImageComboBox</Name>
     </ProjectReference>
     <ProjectReference Include="..\Libraries\SharpZLib\ICSharpCode.SharpZLib.csproj">
-      <Project>{0E7413FF-EB9E-4714-ACF2-BE3A6A7B2FFD}</Project>
+      <Project>{0e7413ff-eb9e-4714-acf2-be3a6a7b2ffd}</Project>
       <Name>ICSharpCode.SharpZLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\Libraries\WindowsAPICodePack\Shell\WindowsAPICodePack_Shell.csproj">
-      <Project>{AA0C00CB-8699-4F37-BFAE-40CA87ACC06D}</Project>
+      <Project>{aa0c00cb-8699-4f37-bfae-40ca87acc06d}</Project>
       <Name>WindowsAPICodePack_Shell</Name>
     </ProjectReference>
+    <ProjectReference Include="..\StartAHKElevated\StartAHKElevated.csproj">
+      <Project>{e7cf6354-3ccf-4a03-9be5-a8690348c091}</Project>
+      <Name>StartAHKElevated</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\T7EBackground\T7EBackground.csproj">
+      <Project>{d3f91321-07f0-4eb1-93f0-ad68d05dead0}</Project>
+      <Name>T7EBackground</Name>
+    </ProjectReference>
     <ProjectReference Include="..\T7ECommon\T7ECommon.csproj">
-      <Project>{7DF8C0C9-F89C-42BD-99B2-D5DCB13FA0BD}</Project>
+      <Project>{7df8c0c9-f89c-42bd-99b2-d5dcb13fa0bd}</Project>
       <Name>T7ECommon</Name>
     </ProjectReference>
   </ItemGroup>
@@ -240,10 +261,10 @@
 if not exist "$(TargetPath).locked" if exist "$(TargetPath)" move "$(TargetPath)" "$(TargetPath).locked"</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>copy $(TargetPath) $(SolutionDir)bin\Release
-copy "$(TargetPath)" "$(TargetPath).locked"
+    <PostBuildEvent>copy "$(TargetPath)" "$(TargetPath).locked"
 if exist "$(TargetDir)Defaults\Icons\" xcopy "$(SolutionDir)Common\Defaults\*" "$(TargetDir)" /e /y /i /exclude:$(ProjectDir)T7EPreferences_Build_Exclude.txt
-if not exist "$(TargetDir)Defaults\Icons\" xcopy "$(SolutionDir)Common\Defaults\*" "$(TargetDir)" /e /y /i</PostBuildEvent>
+if not exist "$(TargetDir)Defaults\Icons\" xcopy "$(SolutionDir)Common\Defaults\*" "$(TargetDir)" /e /y /i
+rem if "$(ConfigurationName)"=="Release" xcopy "$(TargetDir)" "$(SolutionDir)bin\Release" /e /y /i</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -1,11 +1,11 @@
 [Setup]
-OutputBaseFilename=JumplistExtender_v0.4
-VersionInfoVersion=0.4.0
-VersionInfoProductVersion=0.4.0
-AppVerName=Jumplist Extender v0.4
-AppVersion=0.4
+OutputBaseFilename=JumplistExtender_v0.4-B
+VersionInfoVersion=0.4.1
+VersionInfoProductVersion=0.4.1
+AppVerName=Jumplist Extender v0.4-B
+AppVersion=0.4-B
 VersionInfoCompany=Marco Zafra
-VersionInfoDescription=A custom jump list creator for any program on Windows 7
+VersionInfoDescription=A custom jump list creator for any program.
 VersionInfoCopyright=Released under GPLv3
 Compression=lzma/ultra64
 VersionInfoProductName=Jumplist Extender
@@ -37,11 +37,14 @@ Type: files; Name: "{userstartup}\Jumplist Extender Applicator.lnk"
 
 [Files]
 ;------ add IssProc (Files In Use Extension)
-Source: IssProc.dll; DestDir: {tmp}; Flags: dontcopy
+;Source: IssProc.dll; DestDir: {tmp}; Flags: dontcopy
 ;------ add IssProc extra language file (you don't need to add this file if you are using english only)
-Source: IssProcLanguage.ini; DestDir: {tmp}; Flags: dontcopy
+;Source: IssProcLanguage.ini; DestDir: {tmp}; Flags: dontcopy
 Source: Files\*; DestDir: {app}; Excludes: Files\Defaults\Icons\*; Flags: ignoreversion recursesubdirs overwritereadonly uninsremovereadonly
-Source: Files\Defaults\Icons\*; DestDir: {app}\Defaults\Icons; Flags: recursesubdirs onlyifdoesntexist
+;Source: Files\Defaults\Icons\*; DestDir: {app}\Defaults\Icons; Flags: recursesubdirs onlyifdoesntexist
+
+[Dirs]
+Name: {app}\Defaults\Icons; Flags: uninsalwaysuninstall
 
 [Icons]
 Name: {group}\Jumplist Extender; Filename: {app}\T7EPreferences.exe; WorkingDir: {app}; Comment: Create custom jumplists for any program on Windows 7.; IconIndex: 0
@@ -63,60 +66,3 @@ Filename: {app}\T7EPreferences.exe; WorkingDir: {app}; Description: Start Jumpli
 
 [UninstallRun]
 Filename: {app}\NSISInstaller.exe; Parameters: /uninst:{{f3ea12fa-c9a5-4c3d-990a-ba01be930e3e}; Flags: runminimized; RunOnceId: DelService
-
-[Code]
-// IssFindModule called on install
-function IssFindModule(hWnd: Integer; Modulename: PAnsiChar; Language: PAnsiChar; Silent: Boolean; CanIgnore: Boolean ): Integer;
-external 'IssFindModule@files:IssProc.dll stdcall setuponly';
-
-//********************************************************************************************************************************************
-// IssFindModule function returns: 0 if no module found; 1 if cancel pressed; 2 if ignore pressed; -1 if an error occured
-//
-//  hWnd        = main wizard window handle.
-//
-//  Modulename  = module name(s) to check. You can use a full path to a DLL/EXE/OCX or wildcard file name/path. Separate multiple modules with semicolon.
-//                 Example1 : Modulename='*mymodule.dll';     -  will search in any path for mymodule.dll
-//                 Example2 : Modulename=ExpandConstant('{app}\mymodule.dll');     -  will search for mymodule.dll only in {app} folder (the application directory)
-//                 Example3 : Modulename=ExpandConstant('{app}\mymodule.dll;*myApp.exe');   - just like Example2 + search for myApp.exe regardless of his path.
-//
-//  Language    = files in use language dialog. Set this value to empty '' and default english will be used
-//                ( see and include IssProcLanguage.ini if you need custom text or other language)
-//
-//  Silent      = silent mode : set this var to true if you don't want to display the files in use dialog.
-//                When Silent is true IssFindModule will return 1 if it founds the Modulename or 0 if nothing found
-//
-//  CanIgnore   = set this var to false to Disable the Ignore button forcing the user to close those applications before continuing
-//                set this var to true to Enable the Ignore button allowing the user to continue without closing those applications
-//******************************************************************************************************************************************
-
-
-function NextButtonClick(CurPage: Integer): Boolean;
-var
-  hWnd: Integer;
-  sModuleName: String;
-  nCode: Integer;  {IssFindModule returns: 0 if no module found; 1 if cancel pressed; 2 if ignore pressed; -1 if an error occured }
-begin
-  Result := true;
-
- if CurPage = wpReady then
-   begin
-      Result := false;
-      ExtractTemporaryFile('IssProcLanguage.ini');                          { extract extra language file - you don't need to add this line if you are using english only }
-      hWnd := StrToInt(ExpandConstant('{wizardhwnd}'));                     { get main wizard handle }
-      sModuleName :=ExpandConstant('{app}\T7EBackground.exe;{app}\T7EPreferences.exe')                        { searched modules. Tip: separate multiple modules with semicolon Ex: '*mymodule.dll;*mymodule2.dll;*myapp.exe'}
-
-     nCode:=IssFindModule(hWnd,sModuleName,'en',false,true);                { search for module and display files-in-use window if found  }
-     //sModuleName:=IntToStr(nCode);
-    // MsgBox ( sModuleName, mbConfirmation, MB_YESNO or MB_DEFBUTTON2);
-
-     if nCode=1 then  begin                                                 { cancel pressed or files-in-use window closed }
-          PostMessage (WizardForm.Handle, $0010, 0, 0);                     { quit setup, $0010=WM_CLOSE }
-     end else if (nCode=0) or (nCode=2) then begin                          { no module found or ignored pressed}
-          Result := true;                                                   { continue setup  }
-     end;
-
-  end;
-
-end;
-
-

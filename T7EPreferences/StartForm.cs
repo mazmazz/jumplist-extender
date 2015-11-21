@@ -21,6 +21,14 @@ namespace T7EPreferences
         Primary PrimaryForm;
         public StartForm(Primary primaryFormRef)
         {
+            if (primaryFormRef.Visible)
+            {
+                primaryFormRef.StartDialogResult = 0;
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+                return; // this form only has effect if Primary form is not visible. See Primary.ShowStartForm()
+            }
+
             InitializeComponent();
             PrimaryForm = primaryFormRef;
             
@@ -30,7 +38,8 @@ namespace T7EPreferences
             else StartOpenButton.Enabled = true;
 
             // Check to show donate link
-            if (!Common.PrefExists("InstallDate"))
+            // dummying out
+            /*if (true == false && !Common.PrefExists("InstallDate"))
             {
                 if(Common.AppCount > 0) Common.WritePref("InstallDate", DateTime.Today.Year.ToString()+"-"+DateTime.Today.Month.ToString()+"-"+DateTime.Today.Day.ToString()
                     , "InstallUpgrade", false.ToString());
@@ -47,17 +56,20 @@ namespace T7EPreferences
                 // Also, display the donate icon
                 // This might be made invisible by later linklabels.
                 DonatePictureBox.Enabled = DonatePictureBox.Visible = true;
-            }
+            }*/
 
             // Check for new version
-            UpdateCheckWorker.RunWorkerAsync();
-            CheckNewVersion();
+            // dummying out
+            //UpdateCheckWorker.RunWorkerAsync();
+            //CheckNewVersion();
         }
 
         private string VersionHttpLink = "";
 
         private void CheckNewVersion()
         {
+            return; //dummying out
+
             if (!File.Exists(Path.Combine(Common.Path_AppData, "UpdateCheck2.txt"))) return;
             if (!Common.SanitizeUpdateResponse(File.ReadAllText(Path.Combine(Common.Path_AppData, "UpdateCheck2.txt"))))
             {
@@ -132,6 +144,8 @@ namespace T7EPreferences
 
         private void UpdateCheckWorker_DoWork(object sender, DoWorkEventArgs e)
         {
+            return; // dummying out
+
             if ((File.Exists(Path.Combine(Common.Path_AppData, "UpdateCheck2.txt"))
                 && File.GetCreationTime(Path.Combine(Common.Path_AppData, "UpdateCheck2.txt")).Day - DateTime.Now.Day <= -1)
                 || !File.Exists(Path.Combine(Common.Path_AppData, "UpdateCheck2.txt"))
@@ -154,23 +168,44 @@ namespace T7EPreferences
             //PrimaryForm.ShowDonateDialog(true);
         }
 
+        protected void ReallyCenterToScreen()
+        {
+            Screen screen = Screen.FromControl(this);
+
+            Rectangle workingArea = screen.WorkingArea;
+            this.Location = new Point()
+            {
+                X = Math.Max(workingArea.X, workingArea.X + (workingArea.Width - this.Width) / 2),
+                Y = Math.Max(workingArea.Y, workingArea.Y + (workingArea.Height - this.Height) / 2)
+            };
+        }
+
         private void StartForm_Shown(object sender, EventArgs e)
         {
+            this.ReallyCenterToScreen();
+            this.Activate();
+
             DateTime installDate = DateTime.Today;
             bool installUpgrade = false;
+
+            // dummying out
+            bool donateDialogDisable = true;// false;
+            
+            /*
             DateTime.TryParse(Common.ReadPref("InstallDate"), out installDate);
             bool.TryParse(Common.ReadPref("InstallUpgrade"), out installUpgrade);
             if ((DateTime.Today - installDate).Days >= 3 || installUpgrade == true)
             {
                 // if disabledialog, then show will hide
-                bool donateDialogDisable = false;
-                bool.TryParse(Common.ReadPref("DonateDialogDisable"), out donateDialogDisable);
+                // dummying out
+                bool donateDialogDisable = true;// false;
+                /*bool.TryParse(Common.ReadPref("DonateDialogDisable"), out donateDialogDisable);
                 if (!donateDialogDisable)
                 {
                     Donate donationWindow = new Donate(false);
                     donationWindow.Show();
-                }
-            }
+                }//
+            }*/
         }
 
         

@@ -28,7 +28,7 @@ namespace NSISInstaller
 
         public void SetAppIdBackAfterJumplist()
         {
-            JumpList ownList = JumpList.CreateJumpListForAppId("T7E.Meta");
+            /*JumpList ownList = JumpList.CreateJumpListForAppId("T7E.Meta");
             ownList.AddUserTasks(new JumpListLink
             {
                 Title = "Visit the official website",
@@ -36,8 +36,8 @@ namespace NSISInstaller
                 Arguments = "\""+Common.WebPath_OfficialSite+"\"",
                 IconReference = new IconReference(Path.Combine(Common.EnvPath_SystemRoot, "system32\\shell32.dll"), 135)
             });
-            ownList.Refresh();
-            Common.TaskbarManagerInstance.SetCurrentProcessAppId("T7E.Meta");
+            ownList.Refresh();*/
+            Common.TaskbarManagerInstance.SetCurrentProcessAppId("");
         }
 
         private void EraseJumplist(string appId)

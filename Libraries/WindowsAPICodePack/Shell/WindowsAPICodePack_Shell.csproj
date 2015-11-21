@@ -254,12 +254,6 @@
     <Compile Include="Taskbar\UserRemovedJumpListItemsEventArg.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Core\WindowsAPICodePack_Core.csproj">
-      <Project>{2E1FB0DF-F9BB-4909-9F32-2D9D022A8E57}</Project>
-      <Name>WindowsAPICodePack_Core</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Design\ShellThumbnailClassDiagram.cd" />
     <None Include="Design\ShellObjects.cd" />
     <None Include="ExplorerBrowser\ExplorerBrowserDiagram.cd" />
@@ -294,6 +288,12 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Core\WindowsAPICodePack_Core.csproj">
+      <Project>{2e1fb0df-f9bb-4909-9f32-2d9d022a8e57}</Project>
+      <Name>WindowsAPICodePack_Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
