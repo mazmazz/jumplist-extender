@@ -1,39 +1,50 @@
 # Jumplist Extender
 
-Jumplist Extender is an easy-to-use program that lets you add custom jump lists to any of your programs on Windows 7!
-
-**(NEW [Version 0.4](http://code.google.com/p/jumplist-extender/downloads/detail?name=JumplistExtender_v0.4.exe)! - 3/31/2011)**
-
-**ATTENTION NON-ENGLISH USERS:** Please download the new v0.4 update. Jumplist Extender should now work and create new jump lists on your system. Sorry for the delay.
-
-**PLEASE CONSIDER DONATING!** Jumplist Extender took a lot of hard work, and you can help me make it better. I appreciate your help!
-
-## With Jumplist Extender, you can:
-
-### Add your own Program Tasks
-
-**You can add any action you want on your jumplist,** provided it has a keyboard shortcut to your program. Make easy-to-access jumplist items for your everyday tasks! **(Works with command line switches, too!)**
-
-### Pin Any Type of File
-
-**Add ANY file and ANY folder to your jumplist** -- and even rename them on the list! Windows only allows you to add files assigned to (or "openable by") the program -- Extender bypasses that limitation.
-
-### Create Extensions to your Programs
-
-Use AutoHotKey scripting to **extend and add functionality to your programs, easily accessible from your own jumplist!** Add a "Save to Desktop Notes" function to Notepad, or add "Snip and upload to ImageShack" to Snipping Tool!
-
-### Share your Jumplists with Others
-
-Export and import your jumplists into **"Jumplist Packs"**! Upload your Jumplist Pack to the web, and **enable others to download and enjoy your work!**
-
-## Download
-
-[Click here](http://code.google.com/p/jumplist-extender/downloads/list) to see the "[Downloads](http://code.google.com/p/jumplist-extender/downloads/list)" page.
+Jumplist Extender was a Windows utility that allowed you to create custom Jump Lists for any of your
+programs.
 
 ![](https://raw.githubusercontent.com/mazmazz/jumplist-extender/master/jle.png)
 
-## Contributions
+**This software was last released in 2011 and is unsupported.** A [2015 update](https://github.com/mazmazz/jumplist-extender/releases)
+added support for Windows 10 Version 1511.
 
-Find a bug? Be sure to send it my way! Reply to the topic, or send mail to digimarco35@yahoo.com!
+## Features
 
-Jumplist Extender v0.4 is reasonably stable, but still expect bugs. Regardless, any notifications sent my way are appreciated!
+### Add your own Program Tasks
+
+You can add basic actions to your Jump List: inject a keyboard shortcut, or run a program with
+command line switches.
+
+### Pin Any Type of File
+
+You can add any file or folder to your Jump List, whereas Windows normally restricts you to pinning
+files that are associated with the program.
+
+### Create Extensions to your Programs
+
+Use AutoHotKey scripting syntax to run macros on your programs. E.g., you can add a "Save to Desktop
+Notes" function to Notepad, or add "Snip and upload to Imgur" to Snipping Tool!
+
+### Share your Jump Lists with Others
+
+You can export your Jump Lists into "Jumplist Pack" (*.JLP) archives, which are redistributable.
+
+## Press
+
+Jumplist Extender was featured on several name-brand websites and grabbed attention in such
+countries as Germany, Brazil, India, and Japan. It was also aggregated on Softonic and CNET.
+
+* [Microsoft Channel 9](https://channel9.msdn.com/Shows/This+Week+On+Channel+9/TWC9-Silverlight-Tools-for-VS-Azure-Guidance-Rx-and-Home-Server)
+* [Lifehacker](https://lifehacker.com/jumplist-extender-lets-you-customize-jumplist-entries-i-5785247)
+* [Softonic](https://jumplist-extender.en.softonic.com/)
+* [CNET](https://download.cnet.com/Jumplist-Extender/3000-2072_4-75864194.html)
+* [How-To Geek](https://www.howtogeek.com/howto/30131/create-custom-windows-7-jumplists-for-apps-that-dont-have-one/)
+* [Raymond.cc](https://www.raymond.cc/blog/clear-and-disable-jump-lists-in-windows-7/)
+* [Techworld](https://www.techworld.com/download/system-desktop-tools/jumplist-extender-02-3213789/)
+* [NirmalTV.COM](http://www.nirmaltv.com/2011/05/23/add-custom-jumlists-to-any-program-with-jumplist-extender/)
+* [Windows Forest](https://forest.watch.impress.co.jp/docs/review/369204.html) (JP)
+
+### Forks
+
+* [ivan-danilov/jumplist-extender](https://github.com/ivan-danilov/jumplist-extender)
+* [Google Code Archive](https://code.google.com/archive/p/jumplist-extender/)
