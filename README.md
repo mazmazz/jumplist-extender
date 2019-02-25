@@ -33,6 +33,7 @@ You can export your Jump Lists into "Jumplist Pack" (*.JLP) archives, which are 
 
 Jumplist Extender was featured on several name-brand websites and grabbed attention in such
 countries as Germany, Brazil, India, and Japan. It was also aggregated on Softonic and CNET.
+The software achieved 20,000 hits from the coverage.
 
 * [Microsoft Channel 9](https://channel9.msdn.com/Shows/This+Week+On+Channel+9/TWC9-Silverlight-Tools-for-VS-Azure-Guidance-Rx-and-Home-Server)
 * [Lifehacker](https://lifehacker.com/jumplist-extender-lets-you-customize-jumplist-entries-i-5785247)
