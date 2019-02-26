@@ -92,6 +92,8 @@ namespace T7EPreferences
             this.TaskCMDBrowseButton = new System.Windows.Forms.Button();
             this.TaskCMDShowWindowCheckbox = new System.Windows.Forms.CheckBox();
             this.TaskCMDTextBox = new System.Windows.Forms.TextBox();
+            this.TaskCMDWorkDirLabel = new System.Windows.Forms.Label();
+            this.TaskCMDWorkdirTextBox = new System.Windows.Forms.TextBox();
             this.TaskCMDLabel = new System.Windows.Forms.Label();
             this.TaskAHKPanel = new System.Windows.Forms.Panel();
             this.TaskAHKHelpButton = new System.Windows.Forms.Button();
@@ -732,6 +734,8 @@ namespace T7EPreferences
             this.TaskCMDPanel.Controls.Add(this.TaskCMDShowWindowCheckbox);
             this.TaskCMDPanel.Controls.Add(this.TaskCMDTextBox);
             this.TaskCMDPanel.Controls.Add(this.TaskCMDLabel);
+            this.TaskCMDPanel.Controls.Add(this.TaskCMDWorkdirTextBox);
+            this.TaskCMDPanel.Controls.Add(this.TaskCMDWorkDirLabel);
             this.TaskCMDPanel.Enabled = false;
             this.TaskCMDPanel.Location = new System.Drawing.Point(0, 40);
             this.TaskCMDPanel.Margin = new System.Windows.Forms.Padding(2);
@@ -767,7 +771,7 @@ namespace T7EPreferences
             // TaskCMDShowWindowCheckbox
             // 
             this.TaskCMDShowWindowCheckbox.AutoSize = true;
-            this.TaskCMDShowWindowCheckbox.Location = new System.Drawing.Point(30, 50);
+            this.TaskCMDShowWindowCheckbox.Location = new System.Drawing.Point(30, 100);
             this.TaskCMDShowWindowCheckbox.Margin = new System.Windows.Forms.Padding(2);
             this.TaskCMDShowWindowCheckbox.Name = "TaskCMDShowWindowCheckbox";
             this.TaskCMDShowWindowCheckbox.Size = new System.Drawing.Size(172, 17);
@@ -797,6 +801,28 @@ namespace T7EPreferences
             this.TaskCMDLabel.Size = new System.Drawing.Size(93, 13);
             this.TaskCMDLabel.TabIndex = 0;
             this.TaskCMDLabel.Text = "Comman&d Line:";
+            // 
+            // TaskCMDWorkdirTextBox
+            // 
+            this.TaskCMDWorkdirTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.TaskCMDWorkdirTextBox.Location = new System.Drawing.Point(7, 75);
+            this.TaskCMDWorkdirTextBox.Margin = new System.Windows.Forms.Padding(2);
+            this.TaskCMDWorkdirTextBox.Name = "TaskCMDWorkdirTextBox";
+            this.TaskCMDWorkdirTextBox.Size = new System.Drawing.Size(304, 20);
+            this.TaskCMDWorkdirTextBox.TabIndex = 1;
+            this.TaskCMDWorkdirTextBox.Leave += new System.EventHandler(this.TaskCMDWorkDirTextBox_Leave);
+            // 
+            // TaskCMDWorkDirLabel
+            // 
+            this.TaskCMDWorkDirLabel.AutoSize = true;
+            this.TaskCMDWorkDirLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TaskCMDWorkDirLabel.Location = new System.Drawing.Point(5, 57);
+            this.TaskCMDWorkDirLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.TaskCMDWorkDirLabel.Name = "TaskCMDWorkDirLabel";
+            this.TaskCMDWorkDirLabel.Size = new System.Drawing.Size(111, 13);
+            this.TaskCMDWorkDirLabel.TabIndex = 0;
+            this.TaskCMDWorkDirLabel.Text = "Working Directory:";
             // 
             // TaskAHKPanel
             // 
@@ -1485,6 +1511,8 @@ namespace T7EPreferences
         private System.Windows.Forms.CheckBox TaskCMDShowWindowCheckbox;
         private System.Windows.Forms.TextBox TaskCMDTextBox;
         private System.Windows.Forms.Label TaskCMDLabel;
+        private System.Windows.Forms.TextBox TaskCMDWorkdirTextBox;
+        private System.Windows.Forms.Label TaskCMDWorkDirLabel;
         private System.Windows.Forms.Panel ItemPanel;
         private System.Windows.Forms.ComboBox ItemTypeComboBox;
         private System.Windows.Forms.Label ItemTypeLabel;
