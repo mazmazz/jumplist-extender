@@ -39,9 +39,9 @@ The software achieved 20,000 hits from the coverage.
 * [Lifehacker](https://lifehacker.com/jumplist-extender-lets-you-customize-jumplist-entries-i-5785247)
 * [Softonic](https://jumplist-extender.en.softonic.com/)
 * [CNET](https://download.cnet.com/Jumplist-Extender/3000-2072_4-75864194.html)
-* [How-To Geek](https://www.howtogeek.com/howto/30131/create-custom-windows-7-jumplists-for-apps-that-dont-have-one/)
+* [How-To Geek](https://www.howtogeek.com/30131/create-custom-windows-7-jumplists-for-apps-that-dont-have-one/)
 * [Raymond.cc](https://www.raymond.cc/blog/clear-and-disable-jump-lists-in-windows-7/)
-* [Techworld](https://www.techworld.com/download/system-desktop-tools/jumplist-extender-02-3213789/)
+* ~~[Techworld](https://www.techworld.com/download/system-desktop-tools/jumplist-extender-02-3213789/)~~ <!-- No longer valid, can't find article re-hosted on computerworld.com or in the wayback machine -->
 * [NirmalTV.COM](http://www.nirmaltv.com/2011/05/23/add-custom-jumlists-to-any-program-with-jumplist-extender/)
 * [Windows Forest](https://forest.watch.impress.co.jp/docs/review/369204.html) (JP)
 
